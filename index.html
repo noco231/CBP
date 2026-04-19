@@ -36,6 +36,7 @@
             position: relative;
         }
 
+        /* Вкладки (Tabs) */
         .tabs {
             display: flex;
             background: #050505;
@@ -70,6 +71,7 @@
             background: #1f1f1f;
         }
 
+        /* Контент вкладок */
         .tab-content {
             flex: 1;
             display: flex;
@@ -86,6 +88,7 @@
             display: flex;
         }
 
+        /* Сообщения (Чат) - УМЕНЬШЕННЫЕ */
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -156,6 +159,7 @@
             font-family: monospace;
             margin-top: 2px;
         }
+        /* Блок реакций под сообщением - компактный */
         .reactions {
             display: flex;
             align-items: center;
@@ -193,6 +197,7 @@
             color: #ffaa66;
         }
 
+        /* Панель эмодзи */
         .emoji-panel {
             background: #0f0f0f;
             border-top: 1px solid #ff5e00;
@@ -230,6 +235,7 @@
             transform: scale(0.95);
         }
 
+        /* Нижняя панель ввода */
         .input-area {
             background: #050505;
             padding: 6px 10px;
@@ -329,6 +335,7 @@
             font-size: 10px;
         }
 
+        /* ========= ПРОФИЛЬ ========= */
         .profile-pane {
             padding: 20px 16px;
             background: #0b0b0b;
@@ -400,6 +407,7 @@
             cursor: pointer;
         }
 
+        /* Контекстное меню (всплывающее) */
         .context-menu {
             position: fixed;
             background: #1a1a1a;
@@ -440,16 +448,6 @@
                 max-width: 85%;
             }
         }
-        
-        /* Анимация нового сообщения */
-        @keyframes notifFlash {
-            0% { background: #0f0f0f; }
-            50% { background: #ff5e00; color: #000; }
-            100% { background: #0f0f0f; }
-        }
-        .notif-flash {
-            animation: notifFlash 1s ease;
-        }
     </style>
     
     <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
@@ -466,6 +464,7 @@
         <button id="requestNotifBtn" class="notif-request-btn" style="display: none;">🔔 ВКЛ. УВЕД.</button>
     </div>
     
+    <!-- Вкладки -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="chat">💬 ЧАТ</button>
         <button class="tab-btn" data-tab="profile">👤 ПРОФИЛЬ</button>
@@ -500,7 +499,7 @@
                         <input type="text" id="profileNameInput" maxlength="20" placeholder="NeoUser">
                     </div>
                     <button class="save-profile-btn" id="saveProfileBtn">💾 СОХРАНИТЬ</button>
-                    <div class="profile-note">✨ Нажмите и удерживайте сообщение → Удалить (только свои)</div>
+                    <div class="profile-note">✨ Нажмите на сообщение → Удалить (только свои)</div>
                 </div>
             </div>
         </div>
@@ -509,11 +508,13 @@
     <div class="error" id="error" style="display: none;"></div>
 </div>
 
+<!-- Контекстное меню -->
 <div id="contextMenu" class="context-menu">
     <button id="deleteMsgBtn" class="danger">🗑️ Удалить сообщение</button>
 </div>
 
 <script>
+    // ========== FIREBASE КОНФИГ ==========
     const firebaseConfig = {
     apiKey: "AIzaSyBRtSfBYUd5PHRjwnmhb5Mrj67F7KOKr1M",
     authDomain: "noco-83ff7.firebaseapp.com",
@@ -552,46 +553,55 @@
         const profileNameInput = document.getElementById('profileNameInput');
         const saveProfileBtn = document.getElementById('saveProfileBtn');
         
+        // Контекстное меню
         const contextMenu = document.getElementById('contextMenu');
         const deleteMsgBtn = document.getElementById('deleteMsgBtn');
         let currentMessageKey = null;
         let currentMessageSender = null;
         
+        // ---- Система ника ----
         let currentNick = localStorage.getItem('svpChatName') || 'NeoUser';
         
-        // ========== РАБОТАЮЩИЕ УВЕДОМЛЕНИЯ ДЛЯ ТЕЛЕФОНА ==========
-        let notificationsEnabled = localStorage.getItem('svpNotifications') === 'true';
-        let originalTitle = document.title;
+        // ========== УВЕДОМЛЕНИЯ ==========
+        let notificationPermission = false;
         let unreadCount = 0;
         let isChatActive = true;
         let isPageFocused = true;
         
-        // Функция оповещения (работает везде: и локально, и на телефоне)
-        function showAlert(senderName, messageText) {
-            if (!notificationsEnabled) return;
-            
-            // 1. Мигание заголовка вкладки
-            let count = 0;
-            const flashInterval = setInterval(() => {
-                if (isPageFocused && isChatActive) {
-                    clearInterval(flashInterval);
-                    document.title = originalTitle;
-                    return;
-                }
-                document.title = count % 2 === 0 ? `📩 ${senderName}: ${messageText.slice(0, 15)}...` : originalTitle;
-                count++;
-                if (count > 10) {
-                    clearInterval(flashInterval);
-                    document.title = originalTitle;
-                }
-            }, 600);
-            
-            // 2. Вибрация (работает на всех телефонах)
-            if (navigator.vibrate) {
-                navigator.vibrate([200, 100, 200]);
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "granted") {
+                notificationPermission = true;
+                requestNotifBtn.style.display = 'none';
+                statusDiv.innerHTML = '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>';
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(perm => {
+                    if (perm === "granted") {
+                        notificationPermission = true;
+                        requestNotifBtn.style.display = 'none';
+                        statusDiv.innerHTML = '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>';
+                    } else {
+                        requestNotifBtn.style.display = 'inline-block';
+                    }
+                });
+            } else {
+                requestNotifBtn.style.display = 'inline-block';
             }
-            
-            // 3. Звук через Web Audio (работает после взаимодействия)
+        }
+        
+        requestNotifBtn.onclick = () => requestNotificationPermission();
+        
+        function sendNotification(senderName, messageText) {
+            if (!notificationPermission) return;
+            if (!isPageFocused || !isChatActive) {
+                new Notification(`💬 ${senderName}`, {
+                    body: messageText.length > 50 ? messageText.slice(0, 47) + '...' : messageText,
+                    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff5e00'/%3E%3Ctext x='50' y='70' text-anchor='middle' fill='white' font-size='50'%3E💬%3C/text%3E%3C/svg%3E"
+                });
+            }
+        }
+        
+        function playNotificationSound() {
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioCtx.createOscillator();
@@ -599,120 +609,40 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 oscillator.frequency.value = 880;
-                gainNode.gain.value = 0.08;
+                gainNode.gain.value = 0.1;
                 oscillator.start();
                 gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
                 oscillator.stop(audioCtx.currentTime + 0.3);
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-            } catch(e) { console.log("Звук не поддерживается"); }
-            
-            // 4. Подсветка статусной панели
-            const statusSpan = statusDiv.querySelector('span:first-child');
-            const originalHtml = statusSpan ? statusSpan.innerHTML : statusDiv.innerHTML;
-            statusDiv.classList.add('notif-flash');
-            if (statusSpan) {
-                statusSpan.innerHTML = `📩 ${senderName}: ${messageText.slice(0, 20)}...`;
-            }
-            setTimeout(() => {
-                statusDiv.classList.remove('notif-flash');
-                if (statusSpan) {
-                    statusSpan.innerHTML = notificationsEnabled ? '🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ' : '🟢 ONLINE • СВП';
-                }
-            }, 2000);
-            
-            // 5. Счетчик непрочитанных
-            if (!isChatActive || !isPageFocused) {
-                unreadCount++;
-                if (statusSpan) {
-                    statusSpan.innerHTML = notificationsEnabled ? `🟢 ONLINE • СВП • +${unreadCount} 🔔` : `🟢 ONLINE • СВП • +${unreadCount}`;
-                }
-            }
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch(e) {}
         }
         
-        // Запрос разрешения (для браузеров, где есть Notification API)
-        function requestNotificationPermission() {
-            if ("Notification" in window) {
-                if (Notification.permission === "granted") {
-                    notificationsEnabled = true;
-                    localStorage.setItem('svpNotifications', 'true');
-                    requestNotifBtn.style.display = 'none';
-                    statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ</span>';
-                    showAlert("🔔", "Уведомления включены!");
-                } else if (Notification.permission !== "denied") {
-                    Notification.requestPermission().then(perm => {
-                        if (perm === "granted") {
-                            notificationsEnabled = true;
-                            localStorage.setItem('svpNotifications', 'true');
-                            requestNotifBtn.style.display = 'none';
-                            statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ</span>';
-                            showAlert("🔔", "Уведомления включены!");
-                        } else {
-                            notificationsEnabled = true; // всё равно включаем вибрацию и мигание
-                            localStorage.setItem('svpNotifications', 'true');
-                            requestNotifBtn.style.display = 'none';
-                            statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 УВЕД. (ВИБРА)</span>';
-                        }
-                    });
-                } else {
-                    notificationsEnabled = true; // включаем хотя бы вибрацию
-                    localStorage.setItem('svpNotifications', 'true');
-                    requestNotifBtn.style.display = 'none';
-                    statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 УВЕД. (ВИБРА)</span>';
-                }
-            } else {
-                // Если Notification API нет - всё равно включаем вибрацию и мигание
-                notificationsEnabled = true;
-                localStorage.setItem('svpNotifications', 'true');
-                requestNotifBtn.style.display = 'none';
-                statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 ВИБРА+МИГАНИЕ</span>';
-                showAlert("🔔", "Уведомления работают (вибрация)");
-            }
-        }
-        
-        requestNotifBtn.onclick = () => {
-            requestNotificationPermission();
-        };
-        
-        // Отслеживание фокуса страницы
-        window.addEventListener('focus', () => {
-            isPageFocused = true;
-            unreadCount = 0;
-            document.title = originalTitle;
-            const statusSpan = statusDiv.querySelector('span:first-child');
-            if (statusSpan) {
-                statusSpan.innerHTML = notificationsEnabled ? '🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ' : '🟢 ONLINE • СВП';
-            }
-        });
-        window.addEventListener('blur', () => {
-            isPageFocused = false;
-        });
+        window.addEventListener('focus', () => { isPageFocused = true; unreadCount = 0; updateStatusBadge(); });
+        window.addEventListener('blur', () => { isPageFocused = false; });
         
         function updateChatActiveState() {
-            const chatPaneElem = document.getElementById('chatPane');
-            isChatActive = chatPaneElem.classList.contains('active-pane');
-            if (isChatActive && isPageFocused) {
-                unreadCount = 0;
-                const statusSpan = statusDiv.querySelector('span:first-child');
-                if (statusSpan) {
-                    statusSpan.innerHTML = notificationsEnabled ? '🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ' : '🟢 ONLINE • СВП';
-                }
-                document.title = originalTitle;
+            const chatPane = document.getElementById('chatPane');
+            isChatActive = chatPane.classList.contains('active-pane');
+            if (isChatActive && isPageFocused) unreadCount = 0;
+            updateStatusBadge();
+        }
+        
+        function updateStatusBadge() {
+            const statusSpan = statusDiv.querySelector('span:first-child');
+            if (statusSpan) {
+                if (unreadCount > 0 && !isChatActive) statusSpan.innerHTML = `🟢 ONLINE • СВП • +${unreadCount}`;
+                else statusSpan.innerHTML = `🟢 ONLINE • СВП`;
             }
         }
         
-        // Автоматическое включение уведомлений при загрузке
-        setTimeout(() => {
-            if (localStorage.getItem('svpNotifications') === 'true') {
-                notificationsEnabled = true;
-                requestNotifBtn.style.display = 'none';
-                statusDiv.innerHTML = '<span>🟢 ONLINE • СВП • 🔔 УВЕД. ВКЛ</span>';
-            } else {
-                requestNotifBtn.style.display = 'inline-block';
-            }
-        }, 500);
+        const chatPane = document.getElementById('chatPane');
+        const profilePaneEl = document.getElementById('profilePane');
+        const observer = new MutationObserver(() => updateChatActiveState());
+        observer.observe(chatPane, { attributes: true, attributeFilter: ['class'] });
+        observer.observe(profilePaneEl, { attributes: true, attributeFilter: ['class'] });
+        updateChatActiveState();
         
+        // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
         function updateProfileUI() { profileNameInput.value = currentNick; }
         
         function saveProfile() {
@@ -736,6 +666,7 @@
             attachMessageListeners();
         }
         
+        // Эмодзи панель
         let emojiPanelOpen = false;
         emojiToggleBtn.onclick = () => {
             emojiPanelOpen = !emojiPanelOpen;
@@ -758,9 +689,7 @@
         
         database.ref('.info/connected').on('value', (snap) => {
             if (snap.val() === true) {
-                if (!notificationsEnabled) {
-                    statusDiv.innerHTML = '<span>🟢 ONLINE • СВП</span>';
-                }
+                statusDiv.innerHTML = notificationPermission ? '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>' : '<span>🟢 ONLINE • СВП</span>';
                 errorDiv.style.display = 'none';
             } else {
                 statusDiv.innerHTML = '<span>🔴 OFFLINE</span>';
@@ -780,6 +709,7 @@
             return div.innerHTML;
         }
         
+        // УДАЛЕНИЕ через контекстное меню
         function deleteMessageByKey(messageKey, messageSender) {
             if (messageSender !== currentNick) {
                 errorDiv.style.display = 'block';
@@ -795,6 +725,7 @@
             return true;
         }
         
+        // Лайк
         function toggleLike(messageKey, currentLikeState) {
             const likeRef = database.ref(`messages/${messageKey}/likes`);
             const likedByRef = database.ref(`messages/${messageKey}/likedBy/${currentNick}`);
@@ -807,6 +738,7 @@
             }
         }
         
+        // Добавление сообщения в DOM (УМЕНЬШЕННЫЙ РАЗМЕР)
         function addMessage(sender, text, time, isMyMessage, messageKey, isDeleted = false, likeCount = 0, userLiked = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
@@ -842,25 +774,28 @@
                 }
             }
             
-            // Долгое нажатие для удаления
+            // Обработка долгого нажатия (контекстное меню)
             let pressTimer;
             messageDiv.addEventListener('touchstart', (e) => {
                 if (isDeleted) return;
                 pressTimer = setTimeout(() => {
+                    // Открываем меню удаления только для своих сообщений
                     if (sender === currentNick && !isDeleted) {
                         currentMessageKey = messageKey;
                         currentMessageSender = sender;
                         contextMenu.style.display = 'block';
-                        const touch = e.touches[0];
-                        contextMenu.style.left = touch.clientX + 'px';
-                        contextMenu.style.top = touch.clientY - 40 + 'px';
-                        setTimeout(() => document.addEventListener('click', closeContextMenu), 10);
+                        contextMenu.style.left = (e.touches ? e.touches[0].clientX : e.clientX) + 'px';
+                        contextMenu.style.top = (e.touches ? e.touches[0].clientY : e.clientY) - 40 + 'px';
+                        setTimeout(() => {
+                            document.addEventListener('click', closeContextMenu);
+                        }, 10);
                     }
                     e.preventDefault();
                 }, 500);
             });
             messageDiv.addEventListener('touchend', () => { clearTimeout(pressTimer); });
             messageDiv.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
+            // Для мыши (ПК)
             messageDiv.addEventListener('mousedown', (e) => {
                 if (isDeleted) return;
                 pressTimer = setTimeout(() => {
@@ -924,9 +859,13 @@
                 const likedByObj = data.likedBy || {};
                 const userLiked = !!likedByObj[currentNick];
                 
-                // Уведомление о новом сообщении (не от себя)
                 if (!isMy && !data.isOldLoad) {
-                    showAlert(data.sender, data.text);
+                    if (!isChatActive || !isPageFocused) {
+                        sendNotification(data.sender, data.text);
+                        playNotificationSound();
+                        unreadCount++;
+                        updateStatusBadge();
+                    }
                 }
                 addMessage(data.sender, data.text, data.time, isMy, messageKey, data.deleted === true, likes, userLiked);
             });
@@ -1007,8 +946,7 @@
         updateProfileUI();
         attachMessageListeners();
         
-        const chatPaneElem = document.getElementById('chatPane');
-        const profilePane = document.getElementById('profilePane');
+        // Переключение вкладок
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1016,21 +954,22 @@
                 tabBtns.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 if (tabId === 'chat') {
-                    chatPaneElem.classList.add('active-pane');
-                    profilePane.classList.remove('active-pane');
+                    chatPane.classList.add('active-pane');
+                    profilePaneEl.classList.remove('active-pane');
                     messageInput.focus();
                     updateChatActiveState();
                     unreadCount = 0;
+                    updateStatusBadge();
                 } else {
-                    profilePane.classList.add('active-pane');
-                    chatPaneElem.classList.remove('active-pane');
+                    profilePaneEl.classList.add('active-pane');
+                    chatPane.classList.remove('active-pane');
                     updateProfileUI();
                     updateChatActiveState();
                 }
             });
         });
         
-        updateChatActiveState();
+        setTimeout(() => requestNotificationPermission(), 1000);
         messageInput.focus();
         
     } catch (error) {
