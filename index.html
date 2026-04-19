@@ -49,16 +49,16 @@
             border: none;
             color: #ffaa55;
             font-family: monospace;
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: bold;
-            padding: 12px 0;
+            padding: 10px 0;
             cursor: pointer;
             transition: all 0.2s;
             letter-spacing: 1px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             border-bottom: 2px solid transparent;
         }
         .tab-btn.active {
@@ -88,11 +88,11 @@
             display: flex;
         }
 
-        /* Сообщения (Чат) */
+        /* Сообщения (Чат) - УМЕНЬШЕННЫЕ */
         .messages {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 10px;
+            padding: 8px 8px;
             background: #0b0b0b;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
@@ -110,92 +110,78 @@
 
         .message {
             background: #111111;
-            padding: 8px 12px;
-            border-radius: 18px;
-            margin-bottom: 10px;
-            max-width: 85%;
+            padding: 5px 10px;
+            border-radius: 14px;
+            margin-bottom: 6px;
+            max-width: 80%;
             border: 1px solid #2a2a2a;
             position: relative;
             word-wrap: break-word;
+            transition: 0.1s;
+            cursor: pointer;
+        }
+        .message:active {
+            opacity: 0.7;
         }
 
         .my-message {
             background: #1f0a00;
             margin-left: auto;
             border: 1px solid #ff5e00;
-            box-shadow: 0 0 6px rgba(255, 94, 0, 0.3);
+            box-shadow: 0 0 4px rgba(255, 94, 0, 0.3);
         }
 
         .sender {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: bold;
             color: #ff8c00;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .sender-name {
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #ff6a4b;
-            cursor: pointer;
-            font-size: 14px;
-            padding: 4px 8px;
-            border-radius: 20px;
-            transition: all 0.2s;
-            min-width: 36px;
-            min-height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .delete-btn:active {
-            opacity: 0.7;
-            transform: scale(0.95);
-        }
         .text {
-            font-size: 14px;
-            margin: 4px 0;
+            font-size: 12px;
+            margin: 2px 0;
             color: #e0e0e0;
             word-wrap: break-word;
-            line-height: 1.4;
+            line-height: 1.35;
         }
         .time {
-            font-size: 8px;
+            font-size: 7px;
             color: #aa6f3c;
             text-align: right;
             font-family: monospace;
-            margin-top: 4px;
+            margin-top: 2px;
         }
-        /* Блок реакций под сообщением */
+        /* Блок реакций под сообщением - компактный */
         .reactions {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 6px;
+            gap: 4px;
+            margin-top: 3px;
             border-top: 1px solid #2a2a2a;
-            padding-top: 5px;
-            font-size: 12px;
+            padding-top: 3px;
+            font-size: 10px;
         }
         .like-btn {
             background: none;
             border: none;
-            font-size: 14px;
+            font-size: 11px;
             cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 30px;
+            padding: 2px 6px;
+            border-radius: 20px;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             color: #ffaa66;
             transition: 0.1s;
-            min-width: 44px;
+            min-width: 36px;
             justify-content: center;
         }
         .like-btn:active {
@@ -206,7 +192,7 @@
             text-shadow: 0 0 3px #ff3366;
         }
         .like-count {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: bold;
             color: #ffaa66;
         }
@@ -215,10 +201,10 @@
         .emoji-panel {
             background: #0f0f0f;
             border-top: 1px solid #ff5e00;
-            padding: 0 10px;
+            padding: 0 8px;
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             justify-content: center;
             max-height: 0;
             overflow: hidden;
@@ -226,20 +212,20 @@
             flex-shrink: 0;
         }
         .emoji-panel.open {
-            max-height: 130px;
-            padding: 10px 10px;
+            max-height: 110px;
+            padding: 8px 8px;
             overflow-y: auto;
         }
         .emoji-btn {
             background: #1a1a1a;
             border: 1px solid #ff5e00;
             color: #ffaa55;
-            font-size: 22px;
+            font-size: 18px;
             cursor: pointer;
-            padding: 6px 10px;
-            border-radius: 35px;
-            min-width: 42px;
-            min-height: 42px;
+            padding: 4px 8px;
+            border-radius: 30px;
+            min-width: 36px;
+            min-height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -252,7 +238,7 @@
         /* Нижняя панель ввода */
         .input-area {
             background: #050505;
-            padding: 8px 10px;
+            padding: 6px 10px;
             border-top: 1px solid #ff5e00;
             flex-shrink: 0;
         }
@@ -265,11 +251,11 @@
             background: #111;
             border: 1px solid #333;
             color: #ffb347;
-            padding: 10px 12px;
+            padding: 8px 12px;
             border-radius: 25px;
             outline: none;
             font-family: monospace;
-            font-size: 14px;
+            font-size: 13px;
             -webkit-appearance: none;
         }
         .input-area input:focus {
@@ -278,7 +264,7 @@
         }
         #messageInput {
             flex: 1;
-            font-size: 14px;
+            font-size: 13px;
             min-width: 0;
         }
         .input-area button {
@@ -289,14 +275,14 @@
             cursor: pointer;
             font-weight: bold;
             font-family: monospace;
-            font-size: 16px;
+            font-size: 14px;
             transition: 0.1s;
-            min-width: 48px;
-            min-height: 44px;
+            min-width: 44px;
+            min-height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 12px;
+            padding: 0 10px;
         }
         .input-area button:active {
             background: #ff5e00;
@@ -308,25 +294,36 @@
         }
         .emoji-toggle {
             background: #1a1a1a;
-            font-size: 20px;
-            padding: 0 12px;
+            font-size: 18px;
+            padding: 0 10px;
         }
         .status {
             background: #0f0f0f;
             color: #ffaa55;
-            padding: 4px;
+            padding: 3px 8px;
             text-align: center;
-            font-size: 9px;
+            font-size: 8px;
             font-family: monospace;
             border-bottom: 1px dashed #ff5e00;
             flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notif-badge {
+            background: #ff5e00;
+            color: #000;
+            border-radius: 20px;
+            padding: 2px 6px;
+            font-size: 8px;
+            font-weight: bold;
         }
         .error {
             background: #1a0000;
             color: #ff6a4b;
-            padding: 8px;
+            padding: 6px;
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             border-top: 1px solid #ff3c00;
             font-family: monospace;
             flex-shrink: 0;
@@ -335,46 +332,45 @@
             font-style: italic;
             color: #aa6f3c;
             text-align: center;
-            font-size: 11px;
+            font-size: 10px;
         }
 
-        /* ========= ПРОФИЛЬ (вкладка) ========= */
+        /* ========= ПРОФИЛЬ ========= */
         .profile-pane {
-            padding: 24px 20px;
+            padding: 20px 16px;
             background: #0b0b0b;
             flex: 1;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 28px;
+            gap: 20px;
         }
         .profile-card {
             background: #111;
             border: 1px solid #ff5e00;
-            border-radius: 32px;
-            padding: 24px 20px;
+            border-radius: 28px;
+            padding: 20px 16px;
             text-align: center;
-            box-shadow: 0 0 12px rgba(255,94,0,0.2);
         }
         .profile-field {
-            margin: 16px 0;
+            margin: 12px 0;
             text-align: left;
         }
         .profile-field label {
             color: #ffaa66;
-            font-size: 12px;
+            font-size: 11px;
             font-family: monospace;
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
         }
         .profile-field input {
             width: 100%;
             background: #1a1a1a;
             border: 1px solid #ff5e00;
             color: #ffb347;
-            padding: 12px 14px;
+            padding: 10px 12px;
             border-radius: 28px;
-            font-size: 16px;
+            font-size: 14px;
             font-family: monospace;
             text-align: center;
         }
@@ -382,11 +378,11 @@
             background: #1f0a00;
             border: 1.5px solid #ff5e00;
             color: #ff8c00;
-            padding: 12px 20px;
+            padding: 10px 16px;
             border-radius: 40px;
             font-weight: bold;
-            font-size: 16px;
-            margin-top: 10px;
+            font-size: 14px;
+            margin-top: 8px;
             width: 100%;
             cursor: pointer;
         }
@@ -397,15 +393,59 @@
         }
         .profile-note {
             text-align: center;
-            font-size: 10px;
+            font-size: 9px;
             color: #aa6f3c;
-            margin-top: 12px;
+            margin-top: 10px;
+        }
+        .notif-request-btn {
+            background: #1f0a00;
+            border: 1px solid #ff5e00;
+            color: #ffaa55;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 9px;
+            cursor: pointer;
+        }
+
+        /* Контекстное меню (всплывающее) */
+        .context-menu {
+            position: fixed;
+            background: #1a1a1a;
+            border: 1px solid #ff5e00;
+            border-radius: 12px;
+            padding: 4px 0;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            min-width: 140px;
+            display: none;
+        }
+        .context-menu button {
+            background: none;
+            border: none;
+            width: 100%;
+            padding: 10px 16px;
+            text-align: left;
+            color: #ffaa55;
+            font-family: monospace;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.05s;
+        }
+        .context-menu button:active {
+            background: #ff5e00;
+            color: #000;
+        }
+        .context-menu .danger {
+            color: #ff6a4b;
         }
 
         @media (max-width: 400px) {
             .input-area button {
-                min-width: 44px;
+                min-width: 40px;
                 padding: 0 8px;
+            }
+            .message {
+                max-width: 85%;
             }
         }
     </style>
@@ -416,19 +456,21 @@
 <body>
 <div class="chat">
     <div class="header">
-        <h3>СВП</h3>
+        <h3 style="font-size: 1.2rem;">СВП</h3>
     </div>
     
-    <div class="status" id="status">🔌 инициализация...</div>
+    <div class="status" id="status">
+        <span>🔌 инициализация...</span>
+        <button id="requestNotifBtn" class="notif-request-btn" style="display: none;">🔔 ВКЛ. УВЕД.</button>
+    </div>
     
-    <!-- Вкладки: Чат и Профиль -->
+    <!-- Вкладки -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="chat">💬 ЧАТ</button>
         <button class="tab-btn" data-tab="profile">👤 ПРОФИЛЬ</button>
     </div>
 
     <div class="tab-content">
-        <!-- Панель ЧАТ -->
         <div class="tab-pane active-pane" id="chatPane">
             <div class="messages" id="messages"></div>
             
@@ -449,7 +491,6 @@
             </div>
         </div>
         
-        <!-- Панель ПРОФИЛЬ -->
         <div class="tab-pane" id="profilePane">
             <div class="profile-pane">
                 <div class="profile-card">
@@ -457,8 +498,8 @@
                         <label>✏️ ВАШ НИКНЕЙМ</label>
                         <input type="text" id="profileNameInput" maxlength="20" placeholder="NeoUser">
                     </div>
-                    <button class="save-profile-btn" id="saveProfileBtn">💾 СОХРАНИТЬ ПРОФИЛЬ</button>
-                    <div class="profile-note">✨ Имя отображается в чате. Вы можете удалять только свои сообщения.</div>
+                    <button class="save-profile-btn" id="saveProfileBtn">💾 СОХРАНИТЬ</button>
+                    <div class="profile-note">✨ Нажмите на сообщение → Удалить (только свои)</div>
                 </div>
             </div>
         </div>
@@ -467,8 +508,13 @@
     <div class="error" id="error" style="display: none;"></div>
 </div>
 
+<!-- Контекстное меню -->
+<div id="contextMenu" class="context-menu">
+    <button id="deleteMsgBtn" class="danger">🗑️ Удалить сообщение</button>
+</div>
+
 <script>
-    // ========== ⚠️ ВСТАВЬТЕ ВАШИ ДАННЫЕ FIREBASE ЗДЕСЬ ==========
+    // ========== FIREBASE КОНФИГ ==========
     const firebaseConfig = {
     apiKey: "AIzaSyBRtSfBYUd5PHRjwnmhb5Mrj67F7KOKr1M",
     authDomain: "noco-83ff7.firebaseapp.com",
@@ -479,7 +525,6 @@
     appId: "1:383521536951:web:9c1a4b90a021db80d00632",
     measurementId: "G-EYEVMCSGMP"
     };
-    // ============================================================
     
     const isConfigEmpty = (firebaseConfig.apiKey === "ВАШ_API_KEY" || firebaseConfig.databaseURL.includes("ВАШ_ПРОЕКТ"));
     
@@ -503,19 +548,103 @@
         const errorDiv = document.getElementById('error');
         const emojiPanel = document.getElementById('emojiPanel');
         const emojiToggleBtn = document.getElementById('emojiToggleBtn');
+        const requestNotifBtn = document.getElementById('requestNotifBtn');
         
-        // Профильные элементы
         const profileNameInput = document.getElementById('profileNameInput');
         const saveProfileBtn = document.getElementById('saveProfileBtn');
         
-        // ---- Система ника (localStorage) ----
+        // Контекстное меню
+        const contextMenu = document.getElementById('contextMenu');
+        const deleteMsgBtn = document.getElementById('deleteMsgBtn');
+        let currentMessageKey = null;
+        let currentMessageSender = null;
+        
+        // ---- Система ника ----
         let currentNick = localStorage.getItem('svpChatName') || 'NeoUser';
         
-        function updateProfileUI() {
-            profileNameInput.value = currentNick;
+        // ========== УВЕДОМЛЕНИЯ ==========
+        let notificationPermission = false;
+        let unreadCount = 0;
+        let isChatActive = true;
+        let isPageFocused = true;
+        
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) return;
+            if (Notification.permission === "granted") {
+                notificationPermission = true;
+                requestNotifBtn.style.display = 'none';
+                statusDiv.innerHTML = '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>';
+            } else if (Notification.permission !== "denied") {
+                Notification.requestPermission().then(perm => {
+                    if (perm === "granted") {
+                        notificationPermission = true;
+                        requestNotifBtn.style.display = 'none';
+                        statusDiv.innerHTML = '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>';
+                    } else {
+                        requestNotifBtn.style.display = 'inline-block';
+                    }
+                });
+            } else {
+                requestNotifBtn.style.display = 'inline-block';
+            }
         }
         
-        // Сохранение профиля
+        requestNotifBtn.onclick = () => requestNotificationPermission();
+        
+        function sendNotification(senderName, messageText) {
+            if (!notificationPermission) return;
+            if (!isPageFocused || !isChatActive) {
+                new Notification(`💬 ${senderName}`, {
+                    body: messageText.length > 50 ? messageText.slice(0, 47) + '...' : messageText,
+                    icon: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%23ff5e00'/%3E%3Ctext x='50' y='70' text-anchor='middle' fill='white' font-size='50'%3E💬%3C/text%3E%3C/svg%3E"
+                });
+            }
+        }
+        
+        function playNotificationSound() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.frequency.value = 880;
+                gainNode.gain.value = 0.1;
+                oscillator.start();
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.3);
+                oscillator.stop(audioCtx.currentTime + 0.3);
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+            } catch(e) {}
+        }
+        
+        window.addEventListener('focus', () => { isPageFocused = true; unreadCount = 0; updateStatusBadge(); });
+        window.addEventListener('blur', () => { isPageFocused = false; });
+        
+        function updateChatActiveState() {
+            const chatPane = document.getElementById('chatPane');
+            isChatActive = chatPane.classList.contains('active-pane');
+            if (isChatActive && isPageFocused) unreadCount = 0;
+            updateStatusBadge();
+        }
+        
+        function updateStatusBadge() {
+            const statusSpan = statusDiv.querySelector('span:first-child');
+            if (statusSpan) {
+                if (unreadCount > 0 && !isChatActive) statusSpan.innerHTML = `🟢 ONLINE • СВП • +${unreadCount}`;
+                else statusSpan.innerHTML = `🟢 ONLINE • СВП`;
+            }
+        }
+        
+        const chatPane = document.getElementById('chatPane');
+        const profilePaneEl = document.getElementById('profilePane');
+        const observer = new MutationObserver(() => updateChatActiveState());
+        observer.observe(chatPane, { attributes: true, attributeFilter: ['class'] });
+        observer.observe(profilePaneEl, { attributes: true, attributeFilter: ['class'] });
+        updateChatActiveState();
+        
+        // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
+        function updateProfileUI() { profileNameInput.value = currentNick; }
+        
         function saveProfile() {
             let newName = profileNameInput.value.trim();
             if (newName === "") newName = "NeoUser";
@@ -524,23 +653,20 @@
             localStorage.setItem('svpChatName', currentNick);
             updateProfileUI();
             errorDiv.style.display = 'block';
-            errorDiv.innerHTML = '✅ Профиль обновлён! Новое имя: ' + currentNick;
-            setTimeout(() => errorDiv.style.display = 'none', 2000);
-            // Перезагрузка сообщений для корректного отображения "моих" сообщений по новому нику
+            errorDiv.innerHTML = '✅ Профиль обновлён!';
+            setTimeout(() => errorDiv.style.display = 'none', 1500);
             refreshMessagesForNewName();
         }
         
         saveProfileBtn.onclick = saveProfile;
         
-        // Функция обновления сообщений после смены имени
         function refreshMessagesForNewName() {
-            if (!messagesRef) return;
             messagesRef.off();
             messagesDiv.innerHTML = '';
             attachMessageListeners();
         }
         
-        // Панель эмодзи
+        // Эмодзи панель
         let emojiPanelOpen = false;
         emojiToggleBtn.onclick = () => {
             emojiPanelOpen = !emojiPanelOpen;
@@ -561,17 +687,14 @@
             };
         });
         
-        // Статус соединения
         database.ref('.info/connected').on('value', (snap) => {
             if (snap.val() === true) {
-                statusDiv.innerHTML = '🟢 ONLINE • СВП';
-                statusDiv.style.background = '#0a1a05';
+                statusDiv.innerHTML = notificationPermission ? '<span>🟢 ONLINE • СВП</span><span style="font-size:7px;">🔔 увед. вкл.</span>' : '<span>🟢 ONLINE • СВП</span>';
                 errorDiv.style.display = 'none';
             } else {
-                statusDiv.innerHTML = '🔴 OFFLINE • ПОТЕРЯН КОНТАКТ';
-                statusDiv.style.background = '#1a0505';
+                statusDiv.innerHTML = '<span>🔴 OFFLINE</span>';
                 errorDiv.style.display = 'block';
-                errorDiv.innerHTML = '⚠️ НЕТ ПОДКЛЮЧЕНИЯ К FIREBASE ⚠️';
+                errorDiv.innerHTML = '⚠️ НЕТ ПОДКЛЮЧЕНИЯ';
             }
         });
         
@@ -586,68 +709,55 @@
             return div.innerHTML;
         }
         
-        // Функция удаления сообщения
-        function deleteMessage(messageKey, messageSender) {
-            const currentUser = currentNick;
-            if (messageSender !== currentUser) {
+        // УДАЛЕНИЕ через контекстное меню
+        function deleteMessageByKey(messageKey, messageSender) {
+            if (messageSender !== currentNick) {
                 errorDiv.style.display = 'block';
-                errorDiv.innerHTML = '❌ НЕЛЬЗЯ УДАЛИТЬ ЧУЖОЕ СООБЩЕНИЕ ❌';
-                setTimeout(() => errorDiv.style.display = 'none', 2000);
-                return;
+                errorDiv.innerHTML = '❌ Нельзя удалить чужое сообщение';
+                setTimeout(() => errorDiv.style.display = 'none', 1500);
+                return false;
             }
-            if (!confirm(`💀 УДАЛИТЬ СВОЁ СООБЩЕНИЕ? 💀`)) return;
             database.ref(`messages/${messageKey}`).remove().catch(err => {
                 errorDiv.style.display = 'block';
                 errorDiv.innerHTML = `❌ Ошибка: ${err.message}`;
-                setTimeout(() => errorDiv.style.display = 'none', 2500);
+                setTimeout(() => errorDiv.style.display = 'none', 2000);
             });
+            return true;
         }
         
-        // Лайкнуть сообщение (только 1 реакция от пользователя)
+        // Лайк
         function toggleLike(messageKey, currentLikeState) {
             const likeRef = database.ref(`messages/${messageKey}/likes`);
             const likedByRef = database.ref(`messages/${messageKey}/likedBy/${currentNick}`);
             if (!currentLikeState) {
-                // добавить лайк
-                likeRef.transaction((currentLikes) => {
-                    return (currentLikes || 0) + 1;
-                });
+                likeRef.transaction((curr) => (curr || 0) + 1);
                 likedByRef.set(true);
             } else {
-                likeRef.transaction((currentLikes) => {
-                    if (currentLikes && currentLikes > 0) return currentLikes - 1;
-                    return 0;
-                });
+                likeRef.transaction((curr) => curr && curr > 0 ? curr - 1 : 0);
                 likedByRef.remove();
             }
         }
         
-        // Добавление сообщения в DOM с поддержкой лайков (без аватарок)
+        // Добавление сообщения в DOM (УМЕНЬШЕННЫЙ РАЗМЕР)
         function addMessage(sender, text, time, isMyMessage, messageKey, isDeleted = false, likeCount = 0, userLiked = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
             if (isMyMessage) messageDiv.classList.add('my-message');
             messageDiv.setAttribute('data-key', messageKey);
+            messageDiv.setAttribute('data-sender', sender);
             
             if (isDeleted) {
                 messageDiv.innerHTML = `
-                    <div class="sender">
-                        <span class="sender-name">🗑️ ${escapeHtml(sender)}</span>
-                    </div>
+                    <div class="sender"><span class="sender-name">🗑️ ${escapeHtml(sender)}</span></div>
                     <div class="text deleted-message">[Сообщение удалено]</div>
                     <div class="time">${time}</div>
                 `;
             } else {
-                const deleteButtonHtml = isMyMessage ? 
-                    `<button class="delete-btn" data-key="${messageKey}" data-sender="${escapeHtml(sender)}">🗑️</button>` : '';
-                
                 const likeActiveClass = userLiked ? 'liked' : '';
                 const likeIcon = userLiked ? '❤️' : '🤍';
-                
                 messageDiv.innerHTML = `
                     <div class="sender">
                         <span class="sender-name">${escapeHtml(sender)}</span>
-                        ${deleteButtonHtml}
                     </div>
                     <div class="text">${escapeHtml(text)}</div>
                     <div class="time">${time}</div>
@@ -655,31 +765,69 @@
                         <button class="like-btn ${likeActiveClass}" data-key="${messageKey}">${likeIcon} <span class="like-count">${likeCount || 0}</span></button>
                     </div>
                 `;
-                
                 const likeButton = messageDiv.querySelector('.like-btn');
                 if (likeButton) {
                     likeButton.onclick = (e) => {
                         e.stopPropagation();
-                        const newLikeState = !userLiked;
                         toggleLike(messageKey, userLiked);
                     };
                 }
-                
-                if (isMyMessage) {
-                    const delBtn = messageDiv.querySelector('.delete-btn');
-                    if (delBtn) {
-                        delBtn.onclick = (e) => {
-                            e.stopPropagation();
-                            deleteMessage(messageKey, sender);
-                        };
-                    }
-                }
             }
+            
+            // Обработка долгого нажатия (контекстное меню)
+            let pressTimer;
+            messageDiv.addEventListener('touchstart', (e) => {
+                if (isDeleted) return;
+                pressTimer = setTimeout(() => {
+                    // Открываем меню удаления только для своих сообщений
+                    if (sender === currentNick && !isDeleted) {
+                        currentMessageKey = messageKey;
+                        currentMessageSender = sender;
+                        contextMenu.style.display = 'block';
+                        contextMenu.style.left = (e.touches ? e.touches[0].clientX : e.clientX) + 'px';
+                        contextMenu.style.top = (e.touches ? e.touches[0].clientY : e.clientY) - 40 + 'px';
+                        setTimeout(() => {
+                            document.addEventListener('click', closeContextMenu);
+                        }, 10);
+                    }
+                    e.preventDefault();
+                }, 500);
+            });
+            messageDiv.addEventListener('touchend', () => { clearTimeout(pressTimer); });
+            messageDiv.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
+            // Для мыши (ПК)
+            messageDiv.addEventListener('mousedown', (e) => {
+                if (isDeleted) return;
+                pressTimer = setTimeout(() => {
+                    if (sender === currentNick && !isDeleted) {
+                        currentMessageKey = messageKey;
+                        currentMessageSender = sender;
+                        contextMenu.style.display = 'block';
+                        contextMenu.style.left = e.clientX + 'px';
+                        contextMenu.style.top = e.clientY - 40 + 'px';
+                        document.addEventListener('click', closeContextMenu);
+                    }
+                }, 500);
+            });
+            messageDiv.addEventListener('mouseup', () => { clearTimeout(pressTimer); });
+            messageDiv.addEventListener('mouseleave', () => { clearTimeout(pressTimer); });
+            
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
         
-        // Обновление отображения лайков в реальном времени
+        function closeContextMenu() {
+            contextMenu.style.display = 'none';
+            document.removeEventListener('click', closeContextMenu);
+        }
+        
+        deleteMsgBtn.onclick = () => {
+            if (currentMessageKey && currentMessageSender) {
+                deleteMessageByKey(currentMessageKey, currentMessageSender);
+            }
+            closeContextMenu();
+        };
+        
         function updateLikeUI(messageKey, newLikeCount, userHasLiked) {
             const messageElement = document.querySelector(`.message[data-key="${messageKey}"]`);
             if (!messageElement) return;
@@ -697,17 +845,28 @@
             }
         }
         
-        // Прослушивание лайков на каждое сообщение
+        let processedKeys = new Set();
+        
         function attachMessageListeners() {
             messagesRef.limitToLast(50).on('child_added', (snapshot) => {
                 const data = snapshot.val();
                 const messageKey = snapshot.key;
-                if (!data) return;
-                const currentUser = currentNick;
-                const isMy = (data.sender === currentUser);
+                if (!data || processedKeys.has(messageKey)) return;
+                processedKeys.add(messageKey);
+                
+                const isMy = (data.sender === currentNick);
                 const likes = data.likes || 0;
                 const likedByObj = data.likedBy || {};
-                const userLiked = !!likedByObj[currentUser];
+                const userLiked = !!likedByObj[currentNick];
+                
+                if (!isMy && !data.isOldLoad) {
+                    if (!isChatActive || !isPageFocused) {
+                        sendNotification(data.sender, data.text);
+                        playNotificationSound();
+                        unreadCount++;
+                        updateStatusBadge();
+                    }
+                }
                 addMessage(data.sender, data.text, data.time, isMy, messageKey, data.deleted === true, likes, userLiked);
             });
             
@@ -715,15 +874,11 @@
                 const data = snapshot.val();
                 const messageKey = snapshot.key;
                 if (!data) return;
-                const currentUser = currentNick;
                 const likes = data.likes || 0;
                 const likedByObj = data.likedBy || {};
-                const userLiked = !!likedByObj[currentUser];
-                const isDeleted = data.deleted === true;
-                
+                const userLiked = !!likedByObj[currentNick];
                 const existingDiv = document.querySelector(`.message[data-key="${messageKey}"]`);
-                if (existingDiv && !isDeleted) {
-                    // обновляем только лайки
+                if (existingDiv && !data.deleted) {
                     const likeBtn = existingDiv.querySelector('.like-btn');
                     if (likeBtn) {
                         const likeSpan = likeBtn.querySelector('.like-count');
@@ -736,28 +891,17 @@
                             likeBtn.innerHTML = `🤍 <span class="like-count">${likes}</span>`;
                         }
                     }
-                    // если текст поменялся (например, не удалено)
-                    const textDiv = existingDiv.querySelector('.text');
-                    if (textDiv && !data.deleted && data.text && !textDiv.classList.contains('deleted-message')) {
-                        textDiv.innerHTML = escapeHtml(data.text);
-                    }
                     return;
                 }
-                // полная перерисовка если удалено
-                if (isDeleted) {
+                if (data.deleted) {
                     const existing = document.querySelector(`.message[data-key="${messageKey}"]`);
                     if (existing) {
-                        const curUser = currentNick;
-                        const isMyDel = (data.sender === curUser);
+                        const isMyDel = (data.sender === currentNick);
                         const newDiv = document.createElement('div');
                         newDiv.className = 'message';
                         if (isMyDel) newDiv.classList.add('my-message');
                         newDiv.setAttribute('data-key', messageKey);
-                        newDiv.innerHTML = `
-                            <div class="sender"><span class="sender-name">🗑️ ${escapeHtml(data.sender)}</span></div>
-                            <div class="text deleted-message">[Сообщение удалено]</div>
-                            <div class="time">${data.time}</div>
-                        `;
+                        newDiv.innerHTML = `<div class="sender"><span class="sender-name">🗑️ ${escapeHtml(data.sender)}</span></div><div class="text deleted-message">[Сообщение удалено]</div><div class="time">${data.time}</div>`;
                         existing.replaceWith(newDiv);
                     }
                 }
@@ -768,23 +912,9 @@
                 const el = document.querySelector(`.message[data-key="${key}"]`);
                 if (el) el.remove();
             });
-            
-            // дополнительно слушаем изменения лайков
-            messagesRef.on('child_changed', (snapshot) => {
-                const data = snapshot.val();
-                if (data && data.likes !== undefined) {
-                    const key = snapshot.key;
-                    const likes = data.likes || 0;
-                    const likedBy = data.likedBy || {};
-                    const userLiked = !!likedBy[currentNick];
-                    updateLikeUI(key, likes, userLiked);
-                }
-            });
         }
         
-        // Отправка сообщения
         function sendMessage() {
-            const sender = currentNick;
             const text = messageInput.value.trim();
             if (text === '') {
                 messageInput.style.border = '2px solid #ff3300';
@@ -792,7 +922,7 @@
                 return;
             }
             const message = {
-                sender: sender,
+                sender: currentNick,
                 text: text,
                 time: getTime(),
                 timestamp: Date.now(),
@@ -803,25 +933,20 @@
             messagesRef.push(message).then(() => {
                 messageInput.value = '';
                 messageInput.focus();
-            }).catch((error) => {
+            }).catch(err => {
                 errorDiv.style.display = 'block';
-                errorDiv.innerHTML = `❌ ОШИБКА: ${error.message}`;
-                setTimeout(() => errorDiv.style.display = 'none', 3000);
+                errorDiv.innerHTML = `❌ Ошибка: ${err.message}`;
+                setTimeout(() => errorDiv.style.display = 'none', 2000);
             });
         }
         
         sendBtn.onclick = sendMessage;
-        messageInput.onkeypress = (e) => {
-            if (e.key === 'Enter') sendMessage();
-        };
+        messageInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
         
-        // Инициализация профиля и слушателей
         updateProfileUI();
         attachMessageListeners();
         
-        // Вкладки переключения
-        const chatPane = document.getElementById('chatPane');
-        const profilePaneEl = document.getElementById('profilePane');
+        // Переключение вкладок
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -832,22 +957,25 @@
                     chatPane.classList.add('active-pane');
                     profilePaneEl.classList.remove('active-pane');
                     messageInput.focus();
-                } else if (tabId === 'profile') {
+                    updateChatActiveState();
+                    unreadCount = 0;
+                    updateStatusBadge();
+                } else {
                     profilePaneEl.classList.add('active-pane');
                     chatPane.classList.remove('active-pane');
                     updateProfileUI();
+                    updateChatActiveState();
                 }
             });
         });
         
-        statusDiv.innerHTML = '🟢 ONLINE • СВП';
+        setTimeout(() => requestNotificationPermission(), 1000);
         messageInput.focus();
         
     } catch (error) {
         const errorDiv = document.getElementById('error');
         errorDiv.style.display = 'block';
         errorDiv.innerHTML = `💀 ОШИБКА: ${error.message}`;
-        document.getElementById('status').innerHTML = '🔴 СБОЙ';
         console.error(error);
     }
 </script>
