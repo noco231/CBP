@@ -439,6 +439,40 @@
             color: #ff6a4b;
         }
 
+        /* Спиннер загрузки при обновлении */
+        .refresh-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(3px);
+        }
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #ff5e00;
+            border-top: 3px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .refresh-text {
+            color: #ffaa55;
+            margin-top: 15px;
+            font-size: 12px;
+            font-family: monospace;
+            text-align: center;
+        }
+
         @media (max-width: 400px) {
             .input-area button {
                 min-width: 40px;
@@ -558,6 +592,25 @@
         const deleteMsgBtn = document.getElementById('deleteMsgBtn');
         let currentMessageKey = null;
         let currentMessageSender = null;
+        
+        // Функция для отображения спиннера и перезагрузки страницы
+        function showRefreshAndReload() {
+            // Создаем оверлей со спиннером
+            const overlay = document.createElement('div');
+            overlay.className = 'refresh-overlay';
+            overlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="spinner"></div>
+                    <div class="refresh-text">♻️ ОБНОВЛЕНИЕ СТРАНИЦЫ...</div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            
+            // Небольшая задержка для отображения анимации, затем перезагрузка
+            setTimeout(() => {
+                window.location.reload();
+            }, 300);
+        }
         
         // ---- Система ника ----
         let currentNick = localStorage.getItem('svpChatName') || 'NeoUser';
@@ -709,7 +762,7 @@
             return div.innerHTML;
         }
         
-        // УДАЛЕНИЕ через контекстное меню
+        // УДАЛЕНИЕ через контекстное меню - С ОБНОВЛЕНИЕМ СТРАНИЦЫ
         function deleteMessageByKey(messageKey, messageSender) {
             if (messageSender !== currentNick) {
                 errorDiv.style.display = 'block';
@@ -717,11 +770,32 @@
                 setTimeout(() => errorDiv.style.display = 'none', 1500);
                 return false;
             }
-            database.ref(`messages/${messageKey}`).remove().catch(err => {
-                errorDiv.style.display = 'block';
-                errorDiv.innerHTML = `❌ Ошибка: ${err.message}`;
-                setTimeout(() => errorDiv.style.display = 'none', 2000);
-            });
+            
+            // Показываем спиннер и делаем удаление, затем перезагружаем страницу
+            const overlay = document.createElement('div');
+            overlay.className = 'refresh-overlay';
+            overlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div class="spinner"></div>
+                    <div class="refresh-text">🗑️ УДАЛЕНИЕ... ОБНОВЛЕНИЕ...</div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            
+            database.ref(`messages/${messageKey}`).remove()
+                .then(() => {
+                    // После успешного удаления перезагружаем страницу
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                })
+                .catch(err => {
+                    // Если ошибка - убираем оверлей и показываем ошибку
+                    overlay.remove();
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerHTML = `❌ Ошибка: ${err.message}`;
+                    setTimeout(() => errorDiv.style.display = 'none', 2000);
+                });
             return true;
         }
         
