@@ -446,12 +446,12 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.85);
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 2000;
-            backdrop-filter: blur(3px);
+            backdrop-filter: blur(4px);
         }
         .spinner {
             width: 50px;
@@ -575,6 +575,9 @@
         const database = firebase.database();
         const messagesRef = database.ref('messages');
         
+        // Создаем отдельную ветку для команд обновления
+        const refreshCommandRef = database.ref('refreshCommand');
+        
         const messagesDiv = document.getElementById('messages');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -610,6 +613,43 @@
             setTimeout(() => {
                 window.location.reload();
             }, 300);
+        }
+        
+        // Слушаем команду на обновление от других пользователей
+        refreshCommandRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.needRefresh === true) {
+                // Проверяем, что команда не от самого пользователя
+                if (data.triggeredBy !== currentNick) {
+                    // Показываем уведомление и обновляем страницу
+                    const overlay = document.createElement('div');
+                    overlay.className = 'refresh-overlay';
+                    overlay.innerHTML = `
+                        <div style="text-align: center;">
+                            <div class="spinner"></div>
+                            <div class="refresh-text">🔄 КТО-ТО УДАЛИЛ СООБЩЕНИЕ... ОБНОВЛЕНИЕ...</div>
+                        </div>
+                    `;
+                    document.body.appendChild(overlay);
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                }
+                // Удаляем команду после обработки
+                refreshCommandRef.set({ needRefresh: false, triggeredBy: null });
+            }
+        });
+        
+        // Функция для отправки команды обновления всем пользователям
+        function broadcastRefresh() {
+            refreshCommandRef.set({
+                needRefresh: true,
+                triggeredBy: currentNick,
+                timestamp: Date.now()
+            }).catch(err => {
+                console.error('Ошибка отправки команды обновления:', err);
+            });
         }
         
         // ---- Система ника ----
@@ -762,7 +802,7 @@
             return div.innerHTML;
         }
         
-        // УДАЛЕНИЕ через контекстное меню - С ОБНОВЛЕНИЕМ СТРАНИЦЫ
+        // УДАЛЕНИЕ через контекстное меню - С ОБНОВЛЕНИЕМ СТРАНИЦЫ У ВСЕХ
         function deleteMessageByKey(messageKey, messageSender) {
             if (messageSender !== currentNick) {
                 errorDiv.style.display = 'block';
@@ -771,20 +811,22 @@
                 return false;
             }
             
-            // Показываем спиннер и делаем удаление, затем перезагружаем страницу
+            // Показываем спиннер и делаем удаление
             const overlay = document.createElement('div');
             overlay.className = 'refresh-overlay';
             overlay.innerHTML = `
                 <div style="text-align: center;">
                     <div class="spinner"></div>
-                    <div class="refresh-text">🗑️ УДАЛЕНИЕ... ОБНОВЛЕНИЕ...</div>
+                    <div class="refresh-text">🗑️ УДАЛЕНИЕ... ОБНОВЛЕНИЕ ДЛЯ ВСЕХ...</div>
                 </div>
             `;
             document.body.appendChild(overlay);
             
             database.ref(`messages/${messageKey}`).remove()
                 .then(() => {
-                    // После успешного удаления перезагружаем страницу
+                    // Отправляем команду всем пользователям на обновление
+                    broadcastRefresh();
+                    // И сами обновляемся
                     setTimeout(() => {
                         window.location.reload();
                     }, 300);
