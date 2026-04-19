@@ -36,7 +36,6 @@
             position: relative;
         }
 
-        /* Вкладки (Tabs) */
         .tabs {
             display: flex;
             background: #050505;
@@ -71,7 +70,6 @@
             background: #1f1f1f;
         }
 
-        /* Контент вкладок */
         .tab-content {
             flex: 1;
             display: flex;
@@ -88,7 +86,6 @@
             display: flex;
         }
 
-        /* Сообщения (Чат) - УМЕНЬШЕННЫЕ */
         .messages {
             flex: 1;
             overflow-y: auto;
@@ -159,7 +156,6 @@
             font-family: monospace;
             margin-top: 2px;
         }
-        /* Блок реакций под сообщением - компактный */
         .reactions {
             display: flex;
             align-items: center;
@@ -197,7 +193,6 @@
             color: #ffaa66;
         }
 
-        /* Панель эмодзи */
         .emoji-panel {
             background: #0f0f0f;
             border-top: 1px solid #ff5e00;
@@ -235,7 +230,6 @@
             transform: scale(0.95);
         }
 
-        /* Нижняя панель ввода */
         .input-area {
             background: #050505;
             padding: 6px 10px;
@@ -310,14 +304,6 @@
             justify-content: space-between;
             align-items: center;
         }
-        .notif-badge {
-            background: #ff5e00;
-            color: #000;
-            border-radius: 20px;
-            padding: 2px 6px;
-            font-size: 8px;
-            font-weight: bold;
-        }
         .error {
             background: #1a0000;
             color: #ff6a4b;
@@ -335,7 +321,6 @@
             font-size: 10px;
         }
 
-        /* ========= ПРОФИЛЬ ========= */
         .profile-pane {
             padding: 20px 16px;
             background: #0b0b0b;
@@ -407,7 +392,6 @@
             cursor: pointer;
         }
 
-        /* Контекстное меню (всплывающее) */
         .context-menu {
             position: fixed;
             background: #1a1a1a;
@@ -439,40 +423,6 @@
             color: #ff6a4b;
         }
 
-        /* Спиннер загрузки при обновлении */
-        .refresh-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            backdrop-filter: blur(4px);
-        }
-        .spinner {
-            width: 50px;
-            height: 50px;
-            border: 3px solid #ff5e00;
-            border-top: 3px solid transparent;
-            border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .refresh-text {
-            color: #ffaa55;
-            margin-top: 15px;
-            font-size: 12px;
-            font-family: monospace;
-            text-align: center;
-        }
-
         @media (max-width: 400px) {
             .input-area button {
                 min-width: 40px;
@@ -489,16 +439,11 @@
 </head>
 <body>
 <div class="chat">
-    <div class="header">
-        <h3 style="font-size: 1.2rem;">СВП</h3>
-    </div>
-    
     <div class="status" id="status">
         <span>🔌 инициализация...</span>
         <button id="requestNotifBtn" class="notif-request-btn" style="display: none;">🔔 ВКЛ. УВЕД.</button>
     </div>
     
-    <!-- Вкладки -->
     <div class="tabs">
         <button class="tab-btn active" data-tab="chat">💬 ЧАТ</button>
         <button class="tab-btn" data-tab="profile">👤 ПРОФИЛЬ</button>
@@ -533,7 +478,7 @@
                         <input type="text" id="profileNameInput" maxlength="20" placeholder="NeoUser">
                     </div>
                     <button class="save-profile-btn" id="saveProfileBtn">💾 СОХРАНИТЬ</button>
-                    <div class="profile-note">✨ Нажмите на сообщение → Удалить (только свои)</div>
+                    <div class="profile-note">✨ Нажмите и удерживайте на сообщении → Удалить (только свои)</div>
                 </div>
             </div>
         </div>
@@ -542,13 +487,11 @@
     <div class="error" id="error" style="display: none;"></div>
 </div>
 
-<!-- Контекстное меню -->
 <div id="contextMenu" class="context-menu">
     <button id="deleteMsgBtn" class="danger">🗑️ Удалить сообщение</button>
 </div>
 
 <script>
-    // ========== FIREBASE КОНФИГ ==========
     const firebaseConfig = {
     apiKey: "AIzaSyBRtSfBYUd5PHRjwnmhb5Mrj67F7KOKr1M",
     authDomain: "noco-83ff7.firebaseapp.com",
@@ -575,9 +518,6 @@
         const database = firebase.database();
         const messagesRef = database.ref('messages');
         
-        // Создаем отдельную ветку для команд обновления
-        const refreshCommandRef = database.ref('refreshCommand');
-        
         const messagesDiv = document.getElementById('messages');
         const messageInput = document.getElementById('messageInput');
         const sendBtn = document.getElementById('sendBtn');
@@ -590,76 +530,20 @@
         const profileNameInput = document.getElementById('profileNameInput');
         const saveProfileBtn = document.getElementById('saveProfileBtn');
         
-        // Контекстное меню
         const contextMenu = document.getElementById('contextMenu');
         const deleteMsgBtn = document.getElementById('deleteMsgBtn');
         let currentMessageKey = null;
         let currentMessageSender = null;
         
-        // Функция для отображения спиннера и перезагрузки страницы
-        function showRefreshAndReload() {
-            // Создаем оверлей со спиннером
-            const overlay = document.createElement('div');
-            overlay.className = 'refresh-overlay';
-            overlay.innerHTML = `
-                <div style="text-align: center;">
-                    <div class="spinner"></div>
-                    <div class="refresh-text">♻️ ОБНОВЛЕНИЕ СТРАНИЦЫ...</div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            
-            // Небольшая задержка для отображения анимации, затем перезагрузка
-            setTimeout(() => {
-                window.location.reload();
-            }, 300);
-        }
-        
-        // Слушаем команду на обновление от других пользователей
-        refreshCommandRef.on('value', (snapshot) => {
-            const data = snapshot.val();
-            if (data && data.needRefresh === true) {
-                // Проверяем, что команда не от самого пользователя
-                if (data.triggeredBy !== currentNick) {
-                    // Показываем уведомление и обновляем страницу
-                    const overlay = document.createElement('div');
-                    overlay.className = 'refresh-overlay';
-                    overlay.innerHTML = `
-                        <div style="text-align: center;">
-                            <div class="spinner"></div>
-                            <div class="refresh-text">🔄 КТО-ТО УДАЛИЛ СООБЩЕНИЕ... ОБНОВЛЕНИЕ...</div>
-                        </div>
-                    `;
-                    document.body.appendChild(overlay);
-                    
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 300);
-                }
-                // Удаляем команду после обработки
-                refreshCommandRef.set({ needRefresh: false, triggeredBy: null });
-            }
-        });
-        
-        // Функция для отправки команды обновления всем пользователям
-        function broadcastRefresh() {
-            refreshCommandRef.set({
-                needRefresh: true,
-                triggeredBy: currentNick,
-                timestamp: Date.now()
-            }).catch(err => {
-                console.error('Ошибка отправки команды обновления:', err);
-            });
-        }
-        
-        // ---- Система ника ----
         let currentNick = localStorage.getItem('svpChatName') || 'NeoUser';
         
-        // ========== УВЕДОМЛЕНИЯ ==========
         let notificationPermission = false;
         let unreadCount = 0;
         let isChatActive = true;
         let isPageFocused = true;
+        
+        // Хранилище активных сообщений в DOM
+        let activeMessages = new Map(); // key -> DOM элемент
         
         function requestNotificationPermission() {
             if (!("Notification" in window)) return;
@@ -735,7 +619,6 @@
         observer.observe(profilePaneEl, { attributes: true, attributeFilter: ['class'] });
         updateChatActiveState();
         
-        // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
         function updateProfileUI() { profileNameInput.value = currentNick; }
         
         function saveProfile() {
@@ -748,18 +631,10 @@
             errorDiv.style.display = 'block';
             errorDiv.innerHTML = '✅ Профиль обновлён!';
             setTimeout(() => errorDiv.style.display = 'none', 1500);
-            refreshMessagesForNewName();
         }
         
         saveProfileBtn.onclick = saveProfile;
         
-        function refreshMessagesForNewName() {
-            messagesRef.off();
-            messagesDiv.innerHTML = '';
-            attachMessageListeners();
-        }
-        
-        // Эмодзи панель
         let emojiPanelOpen = false;
         emojiToggleBtn.onclick = () => {
             emojiPanelOpen = !emojiPanelOpen;
@@ -802,7 +677,7 @@
             return div.innerHTML;
         }
         
-        // УДАЛЕНИЕ через контекстное меню - С ОБНОВЛЕНИЕМ СТРАНИЦЫ У ВСЕХ
+        // УДАЛЕНИЕ - просто удаляем из Firebase, DOM обновится через child_removed
         function deleteMessageByKey(messageKey, messageSender) {
             if (messageSender !== currentNick) {
                 errorDiv.style.display = 'block';
@@ -811,29 +686,9 @@
                 return false;
             }
             
-            // Показываем спиннер и делаем удаление
-            const overlay = document.createElement('div');
-            overlay.className = 'refresh-overlay';
-            overlay.innerHTML = `
-                <div style="text-align: center;">
-                    <div class="spinner"></div>
-                    <div class="refresh-text">🗑️ УДАЛЕНИЕ... ОБНОВЛЕНИЕ ДЛЯ ВСЕХ...</div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            
+            // Просто удаляем из Firebase
             database.ref(`messages/${messageKey}`).remove()
-                .then(() => {
-                    // Отправляем команду всем пользователям на обновление
-                    broadcastRefresh();
-                    // И сами обновляемся
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 300);
-                })
                 .catch(err => {
-                    // Если ошибка - убираем оверлей и показываем ошибку
-                    overlay.remove();
                     errorDiv.style.display = 'block';
                     errorDiv.innerHTML = `❌ Ошибка: ${err.message}`;
                     setTimeout(() => errorDiv.style.display = 'none', 2000);
@@ -841,7 +696,6 @@
             return true;
         }
         
-        // Лайк
         function toggleLike(messageKey, currentLikeState) {
             const likeRef = database.ref(`messages/${messageKey}/likes`);
             const likedByRef = database.ref(`messages/${messageKey}/likedBy/${currentNick}`);
@@ -854,8 +708,7 @@
             }
         }
         
-        // Добавление сообщения в DOM (УМЕНЬШЕННЫЙ РАЗМЕР)
-        function addMessage(sender, text, time, isMyMessage, messageKey, isDeleted = false, likeCount = 0, userLiked = false) {
+        function createMessageElement(sender, text, time, isMyMessage, messageKey, isDeleted = false, likeCount = 0, userLiked = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message';
             if (isMyMessage) messageDiv.classList.add('my-message');
@@ -890,18 +743,18 @@
                 }
             }
             
-            // Обработка долгого нажатия (контекстное меню)
+            // Обработка долгого нажатия
             let pressTimer;
             messageDiv.addEventListener('touchstart', (e) => {
                 if (isDeleted) return;
                 pressTimer = setTimeout(() => {
-                    // Открываем меню удаления только для своих сообщений
                     if (sender === currentNick && !isDeleted) {
                         currentMessageKey = messageKey;
                         currentMessageSender = sender;
                         contextMenu.style.display = 'block';
-                        contextMenu.style.left = (e.touches ? e.touches[0].clientX : e.clientX) + 'px';
-                        contextMenu.style.top = (e.touches ? e.touches[0].clientY : e.clientY) - 40 + 'px';
+                        const touch = e.touches[0];
+                        contextMenu.style.left = touch.clientX + 'px';
+                        contextMenu.style.top = touch.clientY - 40 + 'px';
                         setTimeout(() => {
                             document.addEventListener('click', closeContextMenu);
                         }, 10);
@@ -911,7 +764,7 @@
             });
             messageDiv.addEventListener('touchend', () => { clearTimeout(pressTimer); });
             messageDiv.addEventListener('touchmove', () => { clearTimeout(pressTimer); });
-            // Для мыши (ПК)
+            
             messageDiv.addEventListener('mousedown', (e) => {
                 if (isDeleted) return;
                 pressTimer = setTimeout(() => {
@@ -928,6 +781,12 @@
             messageDiv.addEventListener('mouseup', () => { clearTimeout(pressTimer); });
             messageDiv.addEventListener('mouseleave', () => { clearTimeout(pressTimer); });
             
+            return messageDiv;
+        }
+        
+        function addMessageToDOM(sender, text, time, isMyMessage, messageKey, isDeleted = false, likeCount = 0, userLiked = false) {
+            const messageDiv = createMessageElement(sender, text, time, isMyMessage, messageKey, isDeleted, likeCount, userLiked);
+            activeMessages.set(messageKey, messageDiv);
             messagesDiv.appendChild(messageDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
@@ -944,91 +803,99 @@
             closeContextMenu();
         };
         
-        function updateLikeUI(messageKey, newLikeCount, userHasLiked) {
-            const messageElement = document.querySelector(`.message[data-key="${messageKey}"]`);
-            if (!messageElement) return;
-            const likeBtn = messageElement.querySelector('.like-btn');
-            if (likeBtn) {
-                const likeSpan = likeBtn.querySelector('.like-count');
-                if (likeSpan) likeSpan.textContent = newLikeCount || 0;
-                if (userHasLiked) {
-                    likeBtn.classList.add('liked');
-                    likeBtn.innerHTML = `❤️ <span class="like-count">${newLikeCount || 0}</span>`;
-                } else {
-                    likeBtn.classList.remove('liked');
-                    likeBtn.innerHTML = `🤍 <span class="like-count">${newLikeCount || 0}</span>`;
+        // Очистка всех сообщений
+        function clearAllMessages() {
+            messagesDiv.innerHTML = '';
+            activeMessages.clear();
+        }
+        
+        // Загрузка существующих сообщений (один раз)
+        let initialLoadDone = false;
+        
+        function loadInitialMessages() {
+            messagesRef.limitToLast(50).once('value', (snapshot) => {
+                clearAllMessages();
+                const messages = [];
+                snapshot.forEach((childSnapshot) => {
+                    messages.push({
+                        key: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+                // Сортируем по времени
+                messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                messages.forEach(msg => {
+                    const isMy = (msg.sender === currentNick);
+                    const likes = msg.likes || 0;
+                    const likedByObj = msg.likedBy || {};
+                    const userLiked = !!likedByObj[currentNick];
+                    addMessageToDOM(msg.sender, msg.text, msg.time, isMy, msg.key, msg.deleted === true, likes, userLiked);
+                });
+                initialLoadDone = true;
+            });
+        }
+        
+        // Слушаем новые сообщения
+        messagesRef.on('child_added', (snapshot) => {
+            if (!initialLoadDone) return; // Пропускаем, пока идет начальная загрузка
+            
+            const data = snapshot.val();
+            const messageKey = snapshot.key;
+            
+            // Проверяем, нет ли уже такого сообщения
+            if (activeMessages.has(messageKey)) return;
+            
+            const isMy = (data.sender === currentNick);
+            const likes = data.likes || 0;
+            const likedByObj = data.likedBy || {};
+            const userLiked = !!likedByObj[currentNick];
+            
+            // Уведомление о новом сообщении
+            if (!isMy && !data.isOldLoad) {
+                if (!isChatActive || !isPageFocused) {
+                    sendNotification(data.sender, data.text);
+                    playNotificationSound();
+                    unreadCount++;
+                    updateStatusBadge();
                 }
             }
-        }
-        
-        let processedKeys = new Set();
-        
-        function attachMessageListeners() {
-            messagesRef.limitToLast(50).on('child_added', (snapshot) => {
-                const data = snapshot.val();
-                const messageKey = snapshot.key;
-                if (!data || processedKeys.has(messageKey)) return;
-                processedKeys.add(messageKey);
-                
-                const isMy = (data.sender === currentNick);
-                const likes = data.likes || 0;
-                const likedByObj = data.likedBy || {};
-                const userLiked = !!likedByObj[currentNick];
-                
-                if (!isMy && !data.isOldLoad) {
-                    if (!isChatActive || !isPageFocused) {
-                        sendNotification(data.sender, data.text);
-                        playNotificationSound();
-                        unreadCount++;
-                        updateStatusBadge();
-                    }
-                }
-                addMessage(data.sender, data.text, data.time, isMy, messageKey, data.deleted === true, likes, userLiked);
-            });
             
-            messagesRef.on('child_changed', (snapshot) => {
-                const data = snapshot.val();
-                const messageKey = snapshot.key;
-                if (!data) return;
-                const likes = data.likes || 0;
-                const likedByObj = data.likedBy || {};
-                const userLiked = !!likedByObj[currentNick];
-                const existingDiv = document.querySelector(`.message[data-key="${messageKey}"]`);
-                if (existingDiv && !data.deleted) {
-                    const likeBtn = existingDiv.querySelector('.like-btn');
-                    if (likeBtn) {
-                        const likeSpan = likeBtn.querySelector('.like-count');
-                        if (likeSpan) likeSpan.textContent = likes;
-                        if (userLiked) {
-                            likeBtn.classList.add('liked');
-                            likeBtn.innerHTML = `❤️ <span class="like-count">${likes}</span>`;
-                        } else {
-                            likeBtn.classList.remove('liked');
-                            likeBtn.innerHTML = `🤍 <span class="like-count">${likes}</span>`;
-                        }
-                    }
-                    return;
-                }
-                if (data.deleted) {
-                    const existing = document.querySelector(`.message[data-key="${messageKey}"]`);
-                    if (existing) {
-                        const isMyDel = (data.sender === currentNick);
-                        const newDiv = document.createElement('div');
-                        newDiv.className = 'message';
-                        if (isMyDel) newDiv.classList.add('my-message');
-                        newDiv.setAttribute('data-key', messageKey);
-                        newDiv.innerHTML = `<div class="sender"><span class="sender-name">🗑️ ${escapeHtml(data.sender)}</span></div><div class="text deleted-message">[Сообщение удалено]</div><div class="time">${data.time}</div>`;
-                        existing.replaceWith(newDiv);
-                    }
-                }
-            });
+            addMessageToDOM(data.sender, data.text, data.time, isMy, messageKey, data.deleted === true, likes, userLiked);
+        });
+        
+        // Слушаем изменения лайков
+        messagesRef.on('child_changed', (snapshot) => {
+            const data = snapshot.val();
+            const messageKey = snapshot.key;
+            const messageDiv = activeMessages.get(messageKey);
+            if (!messageDiv) return;
             
-            messagesRef.on('child_removed', (snapshot) => {
-                const key = snapshot.key;
-                const el = document.querySelector(`.message[data-key="${key}"]`);
-                if (el) el.remove();
-            });
-        }
+            const likes = data.likes || 0;
+            const likedByObj = data.likedBy || {};
+            const userLiked = !!likedByObj[currentNick];
+            const likeBtn = messageDiv.querySelector('.like-btn');
+            if (likeBtn) {
+                const likeSpan = likeBtn.querySelector('.like-count');
+                if (likeSpan) likeSpan.textContent = likes;
+                if (userLiked) {
+                    likeBtn.classList.add('liked');
+                    likeBtn.innerHTML = `❤️ <span class="like-count">${likes}</span>`;
+                } else {
+                    likeBtn.classList.remove('liked');
+                    likeBtn.innerHTML = `🤍 <span class="like-count">${likes}</span>`;
+                }
+            }
+        });
+        
+        // Слушаем удаление сообщений - просто удаляем из DOM
+        messagesRef.on('child_removed', (snapshot) => {
+            const messageKey = snapshot.key;
+            const messageDiv = activeMessages.get(messageKey);
+            if (messageDiv) {
+                messageDiv.remove();
+                activeMessages.delete(messageKey);
+            }
+        });
         
         function sendMessage() {
             const text = messageInput.value.trim();
@@ -1060,9 +927,8 @@
         messageInput.onkeypress = (e) => { if (e.key === 'Enter') sendMessage(); };
         
         updateProfileUI();
-        attachMessageListeners();
+        loadInitialMessages();
         
-        // Переключение вкладок
         const tabBtns = document.querySelectorAll('.tab-btn');
         tabBtns.forEach(btn => {
             btn.addEventListener('click', () => {
