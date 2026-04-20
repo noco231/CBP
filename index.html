@@ -130,12 +130,30 @@
             background: #050505;
             border-bottom: 1px solid #ff5e00;
         }
-        body.theme-dark .header h3 {
-            color: #ff5e00;
-        }
         body.theme-dark .user-name {
             color: #ffaa55;
             background: #1a1a1a;
+        }
+        body.theme-dark .delete-chat-btn {
+            background: none;
+            border: none;
+            color: #ff6a4b;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        body.theme-dark .delete-chat-btn:active {
+            background: #ff6a4b;
+            color: #000;
+        }
+        body.theme-dark .nickname-input {
+            background: #1a1a1a;
+            border: 1px solid #ff5e00;
+            color: #ffb347;
+        }
+        body.theme-dark .auth-card {
+            background: #111;
         }
 
         /* ========= СВЕТЛАЯ ТЕМА (LIGHT) ========= */
@@ -256,12 +274,41 @@
             background: #f5f5f5;
             border-bottom: 1px solid #ff5e00;
         }
-        body.theme-light .header h3 {
-            color: #ff5e00;
-        }
         body.theme-light .user-name {
             color: #ff5e00;
             background: #fff0e6;
+        }
+        body.theme-light .delete-chat-btn {
+            background: none;
+            border: none;
+            color: #ff4444;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+        }
+        body.theme-light .delete-chat-btn:active {
+            background: #ff4444;
+            color: #fff;
+        }
+        body.theme-light .nickname-input {
+            background: #ffffff;
+            border: 1px solid #ff5e00;
+            color: #333;
+        }
+        body.theme-light .auth-card {
+            background: #ffffff;
+        }
+        body.theme-light .auth-card h1 {
+            color: #ff5e00;
+        }
+        body.theme-light .auth-card p {
+            color: #999;
+        }
+        body.theme-light .auth-card input {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            color: #333;
         }
 
         body {
@@ -276,6 +323,7 @@
             transition: background 0.3s ease;
         }
 
+        /* ========= ЭКРАН АВТОРИЗАЦИИ ========= */
         .auth-screen {
             position: fixed;
             top: 0;
@@ -294,7 +342,6 @@
             display: none;
         }
         .auth-card {
-            background: #111;
             border: 2px solid #ff5e00;
             border-radius: 40px;
             padding: 40px 30px;
@@ -302,31 +349,26 @@
             max-width: 350px;
             text-align: center;
             box-shadow: 0 0 30px rgba(255, 94, 0, 0.3);
+            transition: all 0.3s ease;
         }
         .auth-card h1 {
-            color: #ff5e00;
             font-size: 28px;
             margin-bottom: 10px;
         }
         .auth-card p {
-            color: #ffaa55;
             font-size: 12px;
             margin-bottom: 30px;
         }
         .auth-card input {
             width: 100%;
             padding: 14px 18px;
-            background: #1a1a1a;
-            border: 1px solid #ff5e00;
             border-radius: 30px;
-            color: #ffb347;
             font-size: 16px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             font-family: monospace;
-        }
-        .auth-card input::placeholder {
-            color: #aa6f3c;
+            outline: none;
+            transition: all 0.3s ease;
         }
         .auth-card button {
             width: 100%;
@@ -338,12 +380,27 @@
             font-weight: bold;
             font-size: 18px;
             cursor: pointer;
+            margin-top: 10px;
         }
         .auth-card button:active {
             transform: scale(0.97);
         }
+        .auth-card .register-link {
+            margin-top: 20px;
+            font-size: 12px;
+        }
+        .auth-card .register-link span {
+            color: #ff5e00;
+            cursor: pointer;
+            text-decoration: underline;
+        }
         .error-msg {
             color: #ff6a4b;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        .success-msg {
+            color: #00cc66;
             font-size: 12px;
             margin-top: 15px;
         }
@@ -414,6 +471,7 @@
             padding: 5px 12px;
             border-radius: 20px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .search-area {
@@ -487,6 +545,12 @@
             align-items: center;
             transition: all 0.2s;
         }
+        .chat-tab-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
         .chat-tab-name {
             font-size: 14px;
         }
@@ -497,6 +561,18 @@
             padding: 2px 8px;
             font-size: 10px;
             font-weight: bold;
+        }
+        .delete-chat-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 20px;
+            opacity: 0.6;
+        }
+        .delete-chat-btn:active {
+            opacity: 1;
         }
 
         .messages-area {
@@ -625,6 +701,15 @@
         .theme-icon {
             font-size: 20px;
         }
+        .nickname-input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 30px;
+            font-size: 14px;
+            text-align: center;
+            margin-bottom: 12px;
+            outline: none;
+        }
         
         @media (max-width: 500px) {
             .message {
@@ -641,20 +726,42 @@
 </head>
 <body class="theme-dark">
 
+<!-- ЭКРАН АВТОРИЗАЦИИ (ЛОГИН + ПАРОЛЬ) -->
 <div class="auth-screen" id="authScreen">
     <div class="auth-card">
         <h1>💬 SVP</h1>
-        <p>Введите ваш никнейм</p>
-        <input type="text" id="authNickname" placeholder="Никнейм" maxlength="20">
-        <button id="authBtn">ВОЙТИ</button>
-        <div id="authError" class="error-msg"></div>
+        <p>Войдите в свой аккаунт</p>
+        <input type="text" id="loginUsername" placeholder="Логин (никнейм)" maxlength="20">
+        <input type="password" id="loginPassword" placeholder="Пароль">
+        <button id="loginBtn">ВОЙТИ</button>
+        <div class="register-link">
+            Нет аккаунта? <span id="showRegisterBtn">Зарегистрироваться</span>
+        </div>
+        <div id="authMessage" class="error-msg"></div>
     </div>
 </div>
 
+<!-- ЭКРАН РЕГИСТРАЦИИ -->
+<div class="auth-screen" id="registerScreen" style="display: none;">
+    <div class="auth-card">
+        <h1>💬 SVP</h1>
+        <p>Создайте новый аккаунт</p>
+        <input type="text" id="regUsername" placeholder="Логин (никнейм)" maxlength="20">
+        <input type="password" id="regPassword" placeholder="Пароль">
+        <input type="password" id="regPasswordConfirm" placeholder="Подтвердите пароль">
+        <button id="registerBtn">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <div class="register-link">
+            Уже есть аккаунт? <span id="showLoginBtn">Войти</span>
+        </div>
+        <div id="regMessage" class="error-msg"></div>
+    </div>
+</div>
+
+<!-- ОСНОВНОЙ ЧАТ -->
 <div class="chat" id="mainChat" style="display: none;">
     <div class="header">
         <div class="user-info">
-            <span class="user-name" id="currentUserName">User</span>
+            <span class="user-name" id="currentUserName">👤 <span id="userNameText">User</span> ✏️</span>
         </div>
     </div>
     
@@ -706,6 +813,22 @@
         <div class="tab-pane" id="settingsPane">
             <div class="settings-pane">
                 <div class="settings-card">
+                    <h3>👤 СМЕНИТЬ НИКНЕЙМ</h3>
+                    <input type="text" id="newNicknameInput" class="nickname-input" placeholder="Новый никнейм" maxlength="20">
+                    <button class="settings-btn" id="changeNicknameBtn">
+                        ✏️ СМЕНИТЬ НИКНЕЙМ
+                    </button>
+                </div>
+                
+                <div class="settings-card">
+                    <h3>🔐 СМЕНИТЬ ПАРОЛЬ</h3>
+                    <input type="password" id="newPasswordInput" class="nickname-input" placeholder="Новый пароль">
+                    <button class="settings-btn" id="changePasswordBtn">
+                        🔒 СМЕНИТЬ ПАРОЛЬ
+                    </button>
+                </div>
+                
+                <div class="settings-card">
                     <h3>👤 АККАУНТ</h3>
                     <button class="settings-btn" id="logoutSettingsBtn">
                         🚪 ВЫЙТИ ИЗ АККАУНТА
@@ -738,7 +861,7 @@
     };
     
     if (firebaseConfig.apiKey === "ВАШ_API_KEY") {
-        document.getElementById('authError').innerHTML = '⚠️ ОШИБКА: Настройте Firebase!';
+        alert('⚠️ ОШИБКА: Настройте Firebase! Вставьте свои данные в firebaseConfig');
         throw new Error('Firebase не настроен');
     }
     
@@ -757,13 +880,24 @@
     // ТЕМА
     let currentTheme = localStorage.getItem('svpTheme') || 'dark';
     
-    // Элементы DOM
+    // Элементы DOM для авторизации
     const authScreen = document.getElementById('authScreen');
+    const registerScreen = document.getElementById('registerScreen');
+    const loginUsername = document.getElementById('loginUsername');
+    const loginPassword = document.getElementById('loginPassword');
+    const loginBtn = document.getElementById('loginBtn');
+    const showRegisterBtn = document.getElementById('showRegisterBtn');
+    const showLoginBtn = document.getElementById('showLoginBtn');
+    const regUsername = document.getElementById('regUsername');
+    const regPassword = document.getElementById('regPassword');
+    const regPasswordConfirm = document.getElementById('regPasswordConfirm');
+    const registerBtn = document.getElementById('registerBtn');
+    const authMessage = document.getElementById('authMessage');
+    const regMessage = document.getElementById('regMessage');
+    
+    // Элементы DOM для чата
     const mainChat = document.getElementById('mainChat');
-    const authNickname = document.getElementById('authNickname');
-    const authBtn = document.getElementById('authBtn');
-    const authError = document.getElementById('authError');
-    const currentUserNameSpan = document.getElementById('currentUserName');
+    const userNameText = document.getElementById('userNameText');
     const statusSpan = document.getElementById('status');
     const searchInput = document.getElementById('searchInput');
     const searchBtn = document.getElementById('searchBtn');
@@ -784,6 +918,10 @@
     const themeSettingsBtn = document.getElementById('themeSettingsBtn');
     const themeIconSpan = document.getElementById('themeIcon');
     const themeTextSpan = document.getElementById('themeText');
+    const changeNicknameBtn = document.getElementById('changeNicknameBtn');
+    const newNicknameInput = document.getElementById('newNicknameInput');
+    const changePasswordBtn = document.getElementById('changePasswordBtn');
+    const newPasswordInput = document.getElementById('newPasswordInput');
     
     // ========== ФУНКЦИИ ТЕМЫ ==========
     function applyTheme(theme) {
@@ -806,11 +944,318 @@
         applyTheme(newTheme);
     }
     
-    // Применяем сохранённую тему
     applyTheme(currentTheme);
     
     if (themeSettingsBtn) {
         themeSettingsBtn.onclick = toggleTheme;
+    }
+    
+    // ========== ФУНКЦИЯ ХЕШИРОВАНИЯ ПАРОЛЯ (простая, для демо) ==========
+    function hashPassword(password) {
+        let hash = 0;
+        for (let i = 0; i < password.length; i++) {
+            const char = password.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return hash.toString();
+    }
+    
+    // ========== РЕГИСТРАЦИЯ ==========
+    function register() {
+        const username = regUsername.value.trim().toLowerCase();
+        const password = regPassword.value;
+        const passwordConfirm = regPasswordConfirm.value;
+        
+        if (!username || !password) {
+            regMessage.textContent = 'Заполните все поля!';
+            return;
+        }
+        if (username.length < 3) {
+            regMessage.textContent = 'Логин должен быть не менее 3 символов';
+            return;
+        }
+        if (password.length < 4) {
+            regMessage.textContent = 'Пароль должен быть не менее 4 символов';
+            return;
+        }
+        if (password !== passwordConfirm) {
+            regMessage.textContent = 'Пароли не совпадают!';
+            return;
+        }
+        
+        const passwordHash = hashPassword(password);
+        
+        database.ref('users/' + username).once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                regMessage.textContent = 'Пользователь с таким логином уже существует!';
+                return;
+            }
+            
+            database.ref('users/' + username).set({
+                nickname: username,
+                passwordHash: passwordHash,
+                uid: username + '_' + Date.now(),
+                lastSeen: Date.now(),
+                online: false
+            }).then(() => {
+                regMessage.style.color = '#00cc66';
+                regMessage.textContent = '✅ Регистрация успешна! Теперь войдите.';
+                setTimeout(() => {
+                    showLoginScreen();
+                }, 1500);
+            }).catch(err => {
+                regMessage.textContent = 'Ошибка: ' + err.message;
+            });
+        });
+    }
+    
+    // ========== ВХОД ==========
+    function login() {
+        const username = loginUsername.value.trim().toLowerCase();
+        const password = loginPassword.value;
+        
+        if (!username || !password) {
+            authMessage.textContent = 'Введите логин и пароль!';
+            return;
+        }
+        
+        const passwordHash = hashPassword(password);
+        
+        database.ref('users/' + username).once('value', (snapshot) => {
+            if (!snapshot.exists()) {
+                authMessage.textContent = 'Неверный логин или пароль!';
+                return;
+            }
+            
+            const userData = snapshot.val();
+            if (userData.passwordHash !== passwordHash) {
+                authMessage.textContent = 'Неверный логин или пароль!';
+                return;
+            }
+            
+            currentUser = {
+                nickname: username,
+                uid: userData.uid || username,
+                passwordHash: passwordHash
+            };
+            
+            localStorage.setItem('svpUser', JSON.stringify(currentUser));
+            localStorage.setItem('svpPasswordHash', passwordHash);
+            
+            authScreen.classList.add('hidden');
+            registerScreen.style.display = 'none';
+            mainChat.style.display = 'flex';
+            userNameText.textContent = currentUser.nickname;
+            statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname;
+            
+            database.ref('users/' + currentUser.nickname + '/online').set(true);
+            database.ref('users/' + currentUser.nickname + '/lastSeen').set(Date.now());
+            
+            loadUserChats();
+            
+            database.ref('users/' + currentUser.nickname).onDisconnect().update({
+                online: false,
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+        });
+    }
+    
+    // ========== ПЕРЕКЛЮЧЕНИЕ ЭКРАНОВ ==========
+    function showRegisterScreen() {
+        authScreen.classList.add('hidden');
+        registerScreen.style.display = 'flex';
+        authMessage.textContent = '';
+        regMessage.textContent = '';
+        regUsername.value = '';
+        regPassword.value = '';
+        regPasswordConfirm.value = '';
+    }
+    
+    function showLoginScreen() {
+        registerScreen.style.display = 'none';
+        authScreen.classList.remove('hidden');
+        authMessage.textContent = '';
+        regMessage.textContent = '';
+        loginUsername.value = '';
+        loginPassword.value = '';
+    }
+    
+    // ========== ВЫХОД ==========
+    function logout() {
+        if (currentUser) {
+            database.ref('users/' + currentUser.nickname + '/online').set(false);
+            database.ref('users/' + currentUser.nickname + '/lastSeen').set(firebase.database.ServerValue.TIMESTAMP);
+        }
+        
+        detachMessagesListener();
+        detachChatsListener();
+        
+        localStorage.removeItem('svpUser');
+        localStorage.removeItem('svpPasswordHash');
+        currentUser = null;
+        currentChatWith = null;
+        
+        mainChat.style.display = 'none';
+        authScreen.classList.remove('hidden');
+        registerScreen.style.display = 'none';
+        loginUsername.value = '';
+        loginPassword.value = '';
+        authMessage.textContent = '';
+        
+        chatsContainer.innerHTML = '';
+        clearMessages();
+        messagesContainer.classList.remove('active');
+        noChatSelected.style.display = 'flex';
+        inputArea.style.display = 'none';
+        currentChatWith = null;
+        
+        if (chatPane) chatPane.classList.add('active-pane');
+        if (settingsPane) settingsPane.classList.remove('active-pane');
+        if (tabChatBtn) tabChatBtn.classList.add('active');
+        if (tabSettingsBtn) tabSettingsBtn.classList.remove('active');
+    }
+    
+    // ========== СМЕНА ПАРОЛЯ ==========
+    function changePassword() {
+        const newPassword = newPasswordInput.value.trim();
+        if (!newPassword) {
+            statusSpan.innerHTML = '⚠️ Введите новый пароль';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+            return;
+        }
+        if (newPassword.length < 4) {
+            statusSpan.innerHTML = '⚠️ Пароль должен быть не менее 4 символов';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+            return;
+        }
+        
+        const newPasswordHash = hashPassword(newPassword);
+        
+        database.ref('users/' + currentUser.nickname + '/passwordHash').set(newPasswordHash).then(() => {
+            currentUser.passwordHash = newPasswordHash;
+            localStorage.setItem('svpPasswordHash', newPasswordHash);
+            statusSpan.innerHTML = '✅ Пароль успешно изменён!';
+            newPasswordInput.value = '';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 3000);
+        }).catch(err => {
+            statusSpan.innerHTML = '❌ Ошибка: ' + err.message;
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 3000);
+        });
+    }
+    
+    if (changePasswordBtn) {
+        changePasswordBtn.onclick = changePassword;
+    }
+    
+    // ========== ФУНКЦИЯ СМЕНЫ НИКНЕЙМА ==========
+    function changeNickname() {
+        let newNickname = newNicknameInput.value.trim().toLowerCase();
+        if (newNickname === "") {
+            statusSpan.innerHTML = '⚠️ Введите новый никнейм';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+            return;
+        }
+        if (newNickname.length > 20) newNickname = newNickname.slice(0, 18);
+        if (newNickname.length < 3) {
+            statusSpan.innerHTML = '⚠️ Никнейм должен быть не менее 3 символов';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+            return;
+        }
+        if (newNickname === currentUser.nickname) {
+            statusSpan.innerHTML = '⚠️ Это ваш текущий никнейм';
+            setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+            return;
+        }
+        
+        database.ref('users/' + newNickname).once('value', (snapshot) => {
+            if (snapshot.exists()) {
+                statusSpan.innerHTML = '⚠️ Никнейм уже занят';
+                setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
+                return;
+            }
+            
+            const oldNickname = currentUser.nickname;
+            const passwordHash = currentUser.passwordHash;
+            
+            database.ref('users/' + newNickname).set({
+                nickname: newNickname,
+                passwordHash: passwordHash,
+                uid: currentUser.uid,
+                online: true,
+                lastSeen: Date.now()
+            });
+            
+            database.ref('userChats/' + oldNickname).once('value', (snapshot) => {
+                const chats = snapshot.val();
+                if (chats) {
+                    Object.keys(chats).forEach(chatWith => {
+                        database.ref('userChats/' + newNickname + '/' + chatWith).set(chats[chatWith]);
+                        database.ref('userChats/' + chatWith + '/' + newNickname).set(chats[chatWith]);
+                        database.ref('userChats/' + chatWith + '/' + oldNickname).remove();
+                    });
+                }
+                database.ref('userChats/' + oldNickname).remove();
+            });
+            
+            setTimeout(() => {
+                currentUser.nickname = newNickname;
+                localStorage.setItem('svpUser', JSON.stringify(currentUser));
+                userNameText.textContent = currentUser.nickname;
+                statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname;
+                newNicknameInput.value = '';
+                
+                detachMessagesListener();
+                detachChatsListener();
+                currentChatWith = null;
+                clearMessages();
+                messagesContainer.classList.remove('active');
+                noChatSelected.style.display = 'flex';
+                inputArea.style.display = 'none';
+                loadUserChats();
+                
+                database.ref('users/' + oldNickname).remove();
+                
+                statusSpan.innerHTML = '✅ Никнейм изменён на ' + newNickname;
+                setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 3000);
+            }, 1000);
+        });
+    }
+    
+    if (changeNicknameBtn) {
+        changeNicknameBtn.onclick = changeNickname;
+    }
+    
+    window.showChangeNicknameDialog = function() {
+        const newNick = prompt('Введите новый никнейм:', currentUser.nickname);
+        if (newNick && newNick.trim() !== '') {
+            newNicknameInput.value = newNick.trim();
+            changeNickname();
+        }
+    };
+    
+    // ========== ФУНКЦИЯ УДАЛЕНИЯ ЧАТА ==========
+    function deleteChat(chatWithUser) {
+        if (!confirm(`Удалить чат с ${chatWithUser}? Все сообщения будут удалены безвозвратно.`)) {
+            return;
+        }
+        
+        const chatId = getChatId(currentUser.nickname, chatWithUser);
+        
+        database.ref('messages/' + chatId).remove();
+        database.ref('userChats/' + currentUser.nickname + '/' + chatWithUser).remove();
+        database.ref('userChats/' + chatWithUser + '/' + currentUser.nickname).remove();
+        
+        if (currentChatWith === chatWithUser) {
+            currentChatWith = null;
+            clearMessages();
+            messagesContainer.classList.remove('active');
+            noChatSelected.style.display = 'flex';
+            inputArea.style.display = 'none';
+        }
+        
+        statusSpan.innerHTML = '🗑️ Чат удалён';
+        setTimeout(() => statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname, 2000);
     }
     
     // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
@@ -829,7 +1274,6 @@
         return [user1, user2].sort().join('_');
     }
     
-    // ========== ОТПИСКА ОТ СООБЩЕНИЙ ==========
     function detachMessagesListener() {
         if (currentMessagesListener && currentMessagesRef) {
             currentMessagesRef.off('child_added', currentMessagesListener);
@@ -839,7 +1283,6 @@
         messageElementsMap.clear();
     }
     
-    // ========== ОТПИСКА ОТ СПИСКА ЧАТОВ ==========
     function detachChatsListener() {
         if (currentChatsListener && currentUser) {
             const userChatsRef = database.ref('userChats/' + currentUser.nickname);
@@ -848,20 +1291,17 @@
         }
     }
     
-    // ========== ОЧИСТКА СООБЩЕНИЙ ==========
     function clearMessages() {
         messagesContainer.innerHTML = '';
         messageElementsMap.clear();
     }
     
-    // ========== ПРОКРУТКА ВНИЗ ==========
     function scrollToBottom() {
         setTimeout(() => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 100);
     }
     
-    // ========== ДОБАВЛЕНИЕ СООБЩЕНИЯ ==========
     function addMessageToDOM(msg, msgKey) {
         if (messageElementsMap.has(msgKey)) return;
         
@@ -875,7 +1315,6 @@
             <div class="message-time">${msg.time}</div>
         `;
         
-        // Вставляем в правильное место на основе ключа Firebase
         let inserted = false;
         const existingMessages = messagesContainer.querySelectorAll('.message');
         
@@ -896,103 +1335,48 @@
         return messageDiv;
     }
     
-    // ========== АВТОРИЗАЦИЯ ==========
-    function login() {
-        let nickname = authNickname.value.trim();
-        if (nickname === "") {
-            authError.textContent = "Введите никнейм!";
-            return;
-        }
-        if (nickname.length > 20) nickname = nickname.slice(0, 18);
-        
-        database.ref('users/' + nickname).once('value', (snapshot) => {
-            if (snapshot.exists()) {
-                currentUser = {
-                    nickname: nickname,
-                    uid: snapshot.val().uid || nickname
-                };
-            } else {
-                currentUser = {
-                    nickname: nickname,
-                    uid: nickname + '_' + Date.now()
-                };
-                database.ref('users/' + nickname).set({
-                    nickname: nickname,
-                    uid: currentUser.uid,
-                    lastSeen: Date.now(),
-                    online: true
-                });
-            }
-            
-            localStorage.setItem('svpUser', JSON.stringify(currentUser));
-            
-            authScreen.classList.add('hidden');
-            mainChat.style.display = 'flex';
-            currentUserNameSpan.textContent = currentUser.nickname;
-            statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname;
-            
-            loadUserChats();
-            
-            database.ref('users/' + currentUser.nickname).onDisconnect().update({
-                online: false,
-                lastSeen: firebase.database.ServerValue.TIMESTAMP
-            });
-        });
-    }
-    
-    function logout() {
-        if (currentUser) {
-            database.ref('users/' + currentUser.nickname + '/online').set(false);
-            database.ref('users/' + currentUser.nickname + '/lastSeen').set(firebase.database.ServerValue.TIMESTAMP);
-        }
-        
-        detachMessagesListener();
-        detachChatsListener();
-        
-        localStorage.removeItem('svpUser');
-        currentUser = null;
-        currentChatWith = null;
-        
-        authScreen.classList.remove('hidden');
-        mainChat.style.display = 'none';
-        authNickname.value = '';
-        authError.textContent = '';
-        chatsContainer.innerHTML = '';
-        clearMessages();
-        messagesContainer.classList.remove('active');
-        noChatSelected.style.display = 'flex';
-        inputArea.style.display = 'none';
-        currentChatWith = null;
-        
-        // Возвращаемся на вкладку чатов
-        if (chatPane) chatPane.classList.add('active-pane');
-        if (settingsPane) settingsPane.classList.remove('active-pane');
-        if (tabChatBtn) tabChatBtn.classList.add('active');
-        if (tabSettingsBtn) tabSettingsBtn.classList.remove('active');
-    }
-    
-    // Кнопка выхода из настроек
-    if (logoutSettingsBtn) {
-        logoutSettingsBtn.onclick = logout;
-    }
-    
+    // ========== ПРОВЕРКА СОХРАНЁННОГО ПОЛЬЗОВАТЕЛЯ ==========
     const savedUser = localStorage.getItem('svpUser');
-    if (savedUser) {
+    const savedPasswordHash = localStorage.getItem('svpPasswordHash');
+    
+    if (savedUser && savedPasswordHash) {
         try {
-            currentUser = JSON.parse(savedUser);
-            authScreen.classList.add('hidden');
-            mainChat.style.display = 'flex';
-            currentUserNameSpan.textContent = currentUser.nickname;
-            statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname;
-            database.ref('users/' + currentUser.nickname + '/online').set(true);
-            loadUserChats();
+            const user = JSON.parse(savedUser);
+            database.ref('users/' + user.nickname).once('value', (snapshot) => {
+                if (snapshot.exists() && snapshot.val().passwordHash === savedPasswordHash) {
+                    currentUser = user;
+                    authScreen.classList.add('hidden');
+                    registerScreen.style.display = 'none';
+                    mainChat.style.display = 'flex';
+                    userNameText.textContent = currentUser.nickname;
+                    statusSpan.innerHTML = '🟢 ONLINE • ' + currentUser.nickname;
+                    database.ref('users/' + currentUser.nickname + '/online').set(true);
+                    loadUserChats();
+                    database.ref('users/' + currentUser.nickname).onDisconnect().update({
+                        online: false,
+                        lastSeen: firebase.database.ServerValue.TIMESTAMP
+                    });
+                } else {
+                    logout();
+                }
+            });
         } catch(e) {
             logout();
         }
     }
     
-    authBtn.onclick = login;
-    authNickname.onkeypress = (e) => { if (e.key === 'Enter') login(); };
+    // ========== НАВЕШИВАНИЕ ОБРАБОТЧИКОВ ==========
+    if (loginBtn) loginBtn.onclick = login;
+    if (showRegisterBtn) showRegisterBtn.onclick = showRegisterScreen;
+    if (showLoginBtn) showLoginBtn.onclick = showLoginScreen;
+    if (registerBtn) registerBtn.onclick = register;
+    if (logoutSettingsBtn) logoutSettingsBtn.onclick = logout;
+    
+    loginUsername.onkeypress = (e) => { if (e.key === 'Enter') login(); };
+    loginPassword.onkeypress = (e) => { if (e.key === 'Enter') login(); };
+    regUsername.onkeypress = (e) => { if (e.key === 'Enter') register(); };
+    regPassword.onkeypress = (e) => { if (e.key === 'Enter') register(); };
+    regPasswordConfirm.onkeypress = (e) => { if (e.key === 'Enter') register(); };
     
     // ========== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ==========
     function switchTab(tabId) {
@@ -1001,7 +1385,6 @@
             settingsPane.classList.remove('active-pane');
             tabChatBtn.classList.add('active');
             tabSettingsBtn.classList.remove('active');
-            // Убираем автоматический фокус с поля ввода при переключении на чаты
             if (document.activeElement === messageInput) {
                 messageInput.blur();
             }
@@ -1037,7 +1420,6 @@
                     openChatWith(found.nickname);
                     searchResult.classList.remove('show');
                     searchInput.value = '';
-                    // Переключаемся на вкладку чатов
                     switchTab('chat');
                 };
             } else if (found && found.nickname === currentUser.nickname) {
@@ -1067,8 +1449,6 @@
         noChatSelected.style.display = 'none';
         messagesContainer.classList.add('active');
         inputArea.style.display = 'block';
-        // НЕ ставим фокус автоматически, чтобы клавиатура не открывалась сама
-        // messageInput.focus(); - убрано
         
         clearMessages();
         
@@ -1179,17 +1559,13 @@
             
             chatsContainer.innerHTML = chats.map(chat => `
                 <div class="chat-tab ${currentChatWith === chat.withUser ? 'active' : ''}" data-user="${chat.withUser}">
-                    <span class="chat-tab-name">💬 ${escapeHtml(chat.withUser)}</span>
-                    ${chat.unread > 0 ? `<span class="chat-tab-unread">${chat.unread}</span>` : ''}
+                    <div class="chat-tab-left" onclick="event.stopPropagation(); openChatWith('${chat.withUser}')">
+                        <span class="chat-tab-name">💬 ${escapeHtml(chat.withUser)}</span>
+                        ${chat.unread > 0 ? `<span class="chat-tab-unread">${chat.unread}</span>` : ''}
+                    </div>
+                    <button class="delete-chat-btn" onclick="event.stopPropagation(); deleteChat('${chat.withUser}')">🗑️</button>
                 </div>
             `).join('');
-            
-            document.querySelectorAll('.chat-tab').forEach(tab => {
-                tab.onclick = () => {
-                    const user = tab.getAttribute('data-user');
-                    openChatWith(user);
-                };
-            });
         });
     }
     
@@ -1215,8 +1591,6 @@
         };
         
         messageInput.value = '';
-        // НЕ ставим фокус автоматически после отправки
-        // messageInput.focus(); - убрано
         
         database.ref('messages/' + chatId).push(message).then((newMsgRef) => {
             const updateData = {
